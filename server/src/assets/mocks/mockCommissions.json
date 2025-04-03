@@ -1,0 +1,437 @@
+{
+    "commissions": [
+      {
+        "date": "2024-01-01",
+        "amount": 512.78,
+        "category": "Estética",
+        "paid": true
+      },
+      {
+        "date": "2024-01-05",
+        "amount": 367.21,
+        "category": "Peluquería",
+        "paid": false
+      },
+      {
+        "date": "2024-01-10",
+        "amount": 192.56,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-01-15",
+        "amount": 419.72,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-01-20",
+        "amount": 963.28,
+        "category": "Peluquería",
+        "paid": false
+      },
+      {
+        "date": "2024-01-25",
+        "amount": 504.73,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-01-30",
+        "amount": 220.87,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-02-04",
+        "amount": 642.81,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-02-09",
+        "amount": 347.55,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-02-14",
+        "amount": 132.12,
+        "category": "Estética",
+        "paid": true
+      },
+      {
+        "date": "2024-02-19",
+        "amount": 931.57,
+        "category": "Estética",
+        "paid": true
+      },
+      {
+        "date": "2024-02-24",
+        "amount": 468.91,
+        "category": "Peluquería",
+        "paid": false
+      },
+      {
+        "date": "2024-03-03",
+        "amount": 305.19,
+        "category": "Estética",
+        "paid": true
+      },
+      {
+        "date": "2024-03-08",
+        "amount": 695.43,
+        "category": "Peluquería",
+        "paid": false
+      },
+      {
+        "date": "2024-03-13",
+        "amount": 264.77,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-03-18",
+        "amount": 877.82,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-03-23",
+        "amount": 103.45,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-03-28",
+        "amount": 611.29,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-04-02",
+        "amount": 780.36,
+        "category": "Estética",
+        "paid": true
+      },
+      {
+        "date": "2024-04-07",
+        "amount": 425.68,
+        "category": "Peluquería",
+        "paid": false
+      },
+      {
+        "date": "2024-04-12",
+        "amount": 582.14,
+        "category": "Estética",
+        "paid": true
+      },
+      {
+        "date": "2024-04-17",
+        "amount": 354.91,
+        "category": "Peluquería",
+        "paid": false
+      },
+      {
+        "date": "2024-04-22",
+        "amount": 698.57,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-04-27",
+        "amount": 167.23,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-05-02",
+        "amount": 910.84,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-05-07",
+        "amount": 749.36,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-05-12",
+        "amount": 592.18,
+        "category": "Estética",
+        "paid": true
+      },
+      {
+        "date": "2024-05-17",
+        "amount": 286.47,
+        "category": "Peluquería",
+        "paid": false
+      },
+      {
+        "date": "2024-05-22",
+        "amount": 675.91,
+        "category": "Estética",
+        "paid": true
+      },
+      {
+        "date": "2024-05-27",
+        "amount": 824.63,
+        "category": "Peluquería",
+        "paid": false
+      },
+      {
+        "date": "2024-06-01",
+        "amount": 514.72,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-06-06",
+        "amount": 193.87,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-06-11",
+        "amount": 361.24,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-06-16",
+        "amount": 778.19,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-06-21",
+        "amount": 907.32,
+        "category": "Estética",
+        "paid": true
+      },
+      {
+        "date": "2024-06-26",
+        "amount": 432.58,
+        "category": "Peluquería",
+        "paid": false
+      },
+      {
+        "date": "2024-07-01",
+        "amount": 611.72,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-07-06",
+        "amount": 293.87,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-07-11",
+        "amount": 411.24,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-07-16",
+        "amount": 678.19,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-07-21",
+        "amount": 807.32,
+        "category": "Estética",
+        "paid": true
+      },
+      {
+        "date": "2024-07-26",
+        "amount": 332.58,
+        "category": "Peluquería",
+        "paid": false
+      },
+      {
+        "date": "2024-08-02",
+        "amount": 714.72,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-08-07",
+        "amount": 543.87,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-08-12",
+        "amount": 221.24,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-08-17",
+        "amount": 378.19,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-08-22",
+        "amount": 507.32,
+        "category": "Estética",
+        "paid": true
+      },
+      {
+        "date": "2024-08-27",
+        "amount": 232.58,
+        "category": "Peluquería",
+        "paid": false
+      },
+      {
+        "date": "2024-09-01",
+        "amount": 815.72,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-09-06",
+        "amount": 643.87,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-09-11",
+        "amount": 421.24,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-09-16",
+        "amount": 588.19,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-09-21",
+        "amount": 717.32,
+        "category": "Estética",
+        "paid": true
+      },
+      {
+        "date": "2024-09-26",
+        "amount": 442.58,
+        "category": "Peluquería",
+        "paid": false
+      },
+      {
+        "date": "2024-10-02",
+        "amount": 916.72,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-10-07",
+        "amount": 743.87,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-10-12",
+        "amount": 521.24,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-10-17",
+        "amount": 688.19,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-10-22",
+        "amount": 817.32,
+        "category": "Estética",
+        "paid": true
+      },
+      {
+        "date": "2024-10-27",
+        "amount": 542.58,
+        "category": "Peluquería",
+        "paid": false
+      },
+      {
+        "date": "2024-11-01",
+        "amount": 1017.72,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-11-06",
+        "amount": 843.87,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-11-11",
+        "amount": 621.24,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-11-16",
+        "amount": 788.19,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-11-21",
+        "amount": 917.32,
+        "category": "Estética",
+        "paid": true
+      },
+      {
+        "date": "2024-11-26",
+        "amount": 642.58,
+        "category": "Peluquería",
+        "paid": false
+      },
+      {
+        "date": "2024-12-02",
+        "amount": 1118.72,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-12-07",
+        "amount": 943.87,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-12-12",
+        "amount": 721.24,
+        "category": "Estética",
+        "paid": false
+      },
+      {
+        "date": "2024-12-17",
+        "amount": 888.19,
+        "category": "Peluquería",
+        "paid": true
+      },
+      {
+        "date": "2024-12-22",
+        "amount": 1017.32,
+        "category": "Estética",
+        "paid": true
+      },
+      {
+        "date": "2024-12-27",
+        "amount": 742.58,
+        "category": "Peluquería",
+        "paid": false
+      }
+    ]
+  }
+  

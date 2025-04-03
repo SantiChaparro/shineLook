@@ -1,0 +1,34 @@
+{
+    "services": [
+        {
+            "service_name": "Corte",
+            "category": "Peluquería",
+            "cost": 5000
+        },
+        {
+            "service_name": "Tintura",
+            "category": "Peluquería",
+            "cost": 4000
+        },
+        {
+            "service_name": "Maquillaje",
+            "category": "Estética",
+            "cost": 4000
+        },
+        {
+            "service_name": "Uñas",
+            "category": "Estética",
+            "cost": 3500
+        },
+        {
+            "service_name": "Podología",
+            "category": "Estética",
+            "cost": 3000
+        },
+        {
+            "service_name": "Bronceado",
+            "category": "Estética",
+            "cost": 6000
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+.containerReference{
+    gap: 20px;
+    columns: 2;
+}
+
+.boxReference{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    padding: 2px;
+}
+.dotReference {
+    width: 6px;
+    height: 6px;
+    background-color: #03800b;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+  }
+  .spanReference {
+    font-size:x-small;
+  }

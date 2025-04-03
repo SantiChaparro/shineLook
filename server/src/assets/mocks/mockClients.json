@@ -1,0 +1,144 @@
+{
+    "clients":[
+        {
+            "dni": 28271453,
+            "name": "Santiago Chaparro",
+            "DateOfBirth": "1990-05-15",
+            "phone": "1234567890",
+            "mail": "santiago@example.com"
+        },
+        {
+            "dni": 87654321,
+            "name": "María Pérez",
+            "DateOfBirth": "1985-11-20",
+            "phone": "9876543210",
+            "mail": "maria.perez@example.com"
+        },
+        {
+            "dni": 45678901,
+            "name": "Juan Rodríguez",
+            "DateOfBirth": "1978-03-10",
+            "phone": "5558889999",
+            "mail": "juanrodriguez@example.com"
+        },
+        {
+            "dni": 78901234,
+            "name": "Ana Martínez",
+            "DateOfBirth": "1993-09-02",
+            "phone": "7773331111",
+            "mail": "ana.martinez@example.com"
+        },
+        {
+            "dni": 98765432,
+            "name": "Pedro Gómez",
+            "DateOfBirth": "1980-12-25",
+            "phone": "9990001111",
+            "mail": "pedro.gomez@example.com"
+        },
+        {
+            "dni": 65432109,
+            "name": "Laura Sánchez",
+            "DateOfBirth": "1995-07-18",
+            "phone": "4443332222",
+            "mail": "laura.sanchez@example.com"
+        },
+        {
+            "dni": 21098765,
+            "name": "Carlos González",
+            "DateOfBirth": "1972-01-30",
+            "phone": "1112223333",
+            "mail": "carlosgonzalez@example.com"
+        },
+        {
+            "dni": 54321098,
+            "name": "Lucía López",
+            "DateOfBirth": "1987-04-05",
+            "phone": "6667778888",
+            "mail": "lucia.lopez@example.com"
+        },
+        {
+            "dni": 10325478,
+            "name": "Miguel Fernández",
+            "DateOfBirth": "1998-08-12",
+            "phone": "2224446666",
+            "mail": "miguelfernandez@example.com"
+        },
+        {
+            "dni": 87654309,
+            "name": "Elena Ruiz",
+            "DateOfBirth": "1983-06-28",
+            "phone": "8889990000",
+            "mail": "elena.ruiz@example.com"
+        },
+        {
+            "dni": 98701234,
+            "name": "Diego Castro",
+            "DateOfBirth": "1991-02-14",
+            "phone": "3332221111",
+            "mail": "diego.castro@example.com"
+        },
+        {
+            "dni": 45908762,
+            "name": "Carolina Díaz",
+            "DateOfBirth": "1976-10-03",
+            "phone": "5557779999",
+            "mail": "carolina.diaz@example.com"
+        },
+        {
+            "dni": 32140987,
+            "name": "Julio Ramírez",
+            "DateOfBirth": "1988-03-27",
+            "phone": "9998887777",
+            "mail": "julio.ramirez@example.com"
+        },
+        {
+            "dni": 76543201,
+            "name": "Paula Herrera",
+            "DateOfBirth": "1984-11-08",
+            "phone": "7776665555",
+            "mail": "paula.herrera@example.com"
+        },
+        {
+            "dni": 60123478,
+            "name": "Roberto Moreno",
+            "DateOfBirth": "1994-05-22",
+            "phone": "1110002222",
+            "mail": "roberto.moreno@example.com"
+        },
+        {
+            "dni": 89012345,
+            "name": "Marcela Silva",
+            "DateOfBirth": "1979-09-17",
+            "phone": "3331114444",
+            "mail": "marcela.silva@example.com"
+        },
+        {
+            "dni": 23409876,
+            "name": "Andrea Castro",
+            "DateOfBirth": "1996-07-10",
+            "phone": "8887776666",
+            "mail": "andrea.castro@example.com"
+        },
+        {
+            "dni": 98762345,
+            "name": "Fernando Gutiérrez",
+            "DateOfBirth": "1982-04-12",
+            "phone": "6665554444",
+            "mail": "fernando.gutierrez@example.com"
+        },
+        {
+            "dni": 45670123,
+            "name": "Laura Pérez",
+            "DateOfBirth": "1975-01-05",
+            "phone": "2223334444",
+            "mail": "laura.perez@example.com"
+        },
+        {
+            "dni": 87650912,
+            "name": "Javier Martínez",
+            "DateOfBirth": "1990-08-30",
+            "phone": "7778889999",
+            "mail": "javier.martinez@example.com"
+        }
+    ]
+}

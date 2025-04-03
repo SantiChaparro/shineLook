@@ -1,0 +1,45 @@
+
+    [
+        {
+    "professional":"67890123",
+      "service": [1, 3, 6]
+    },
+    {
+    "professional":"12345678", 
+      "service": [2, 4]
+    },
+    {
+    "professional":"87654321",
+      "service": [1, 4]
+    },
+    {
+    "professional":"34567890",
+      "service": [2, 3, 5]
+    },
+    {
+    "professional":"45678901",
+      "service": [1, 3, 6]
+    },
+    {
+    "professional":"89012345",
+      "service": [2]
+    },
+    {
+    "professional":"78901234",
+      "service": [1, 5]
+    },
+    {
+    "professional":"23456789",
+      "service": [3, 4]
+    },
+    {
+    "professional":"98765432",
+      "service": [2, 5]
+    },
+    {
+    "professional":"56789012",
+      "service": [1, 4, 6]
+    }
+]
+  
+  

@@ -1,0 +1,5 @@
+.container{
+    background-image: url('../../assets/fondoVerdeClaro.jpg');
+    background-size:cover;
+    height: 100vh;
+}

@@ -1,0 +1,17 @@
+.formContainer {
+    width: fit-content;
+    height: 100%;
+    margin: auto;
+    display: flex;
+    padding: 1.6rem;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    background-color: aliceblue;
+  }
+
+  .error {
+    color: red;
+    font-size: 12px;
+  }

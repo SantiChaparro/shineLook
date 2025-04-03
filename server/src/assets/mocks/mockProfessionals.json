@@ -1,0 +1,259 @@
+{
+  "professionals": [
+    {
+      "dni": 12345678,
+      "name": "Carlos Sánchez",
+      "phone": "1234567890",
+      "mail": "carlos.sanchez@example.com",
+      "commission_percentage": 10,
+      "password": "contraseña123",
+      "rol": "profesional",
+      "services": [
+        {
+          "idService": 2,
+          "primary": 20,
+          "secondary": 40
+        },
+        {
+          "idService": 4,
+          "primary": 20,
+          "secondary": 40
+        }
+      ]
+    },
+    {
+      "dni": 23456789,
+      "name": "María Rodríguez",
+      "phone": "9876543210",
+      "mail": "maria.rodriguez@example.com",
+      "commission_percentage": 10,
+      "password": "contraseña456",
+      "rol": "profesional",
+      "services": [
+        {
+          "idService": 3,
+          "primary": 20,
+          "secondary": 30
+        },
+        {
+          "idService": 4,
+          "primary": 25,
+          "secondary": 50
+        }
+      ]
+    },
+    {
+      "dni": 34567890,
+      "name": "Juan Martínez",
+      "phone": "5558889999",
+      "mail": "juan.martinez@example.com",
+      "commission_percentage": 10,
+      "password": "contraseña789",
+      "rol": "profesional",
+      "services": [
+        {
+          "idService": 2,
+          "primary": 30,
+          "secondary": 40
+        },
+        {
+          "idService": 3,
+          "primary": 20,
+          "secondary": 40
+        },
+        {
+          "idService": 5,
+          "primary": 30,
+          "secondary": 0
+        }
+      ]
+    },
+    {
+      "dni": 45678901,
+      "name": "Laura Gómez",
+      "phone": "7773331111",
+      "mail": "laura.gomez@example.com",
+      "commission_percentage": 5,
+      "password": "contraseña1011",
+      "rol": "profesional",
+      "services": [
+        {
+          "idService": 1,
+          "primary": 30,
+          "secondary": 40
+        },
+        {
+          "idService": 3,
+          "primary": 20,
+          "secondary": 40
+        },
+        {
+          "idService": 6,
+          "primary": 30,
+          "secondary": 0
+        }
+      ]
+    },
+    {
+      "dni": 56789012,
+      "name": "Pedro López",
+      "phone": "9990001111",
+      "mail": "pedro.lopez@example.com",
+      "commission_percentage": 5,
+      "password": "contraseña1213",
+      "rol": "profesional",
+      "services": [
+        {
+          "idService": 1,
+          "primary": 30,
+          "secondary": 40
+        },
+        {
+          "idService": 4,
+          "primary": 20,
+          "secondary": 40
+        },
+        {
+          "idService": 6,
+          "primary": 30,
+          "secondary": 0
+        }
+      ]
+    },
+    {
+      "dni": 67890123,
+      "name": "Ana Díaz",
+      "phone": "4443332222",
+      "mail": "ana.diaz@example.com",
+      "commission_percentage": 5,
+      "password": "contraseña1415",
+      "rol": "profesional",
+      "services": [
+        {
+          "idService": 1,
+          "primary": 30,
+          "secondary": 40
+        },
+        {
+          "idService": 3,
+          "primary": 20,
+          "secondary": 40
+        },
+        {
+          "idService": 6,
+          "primary": 30,
+          "secondary": 0
+        }
+      ]
+    },
+    {
+      "dni": 78901234,
+      "name": "Luis Pérez",
+      "phone": "1112223333",
+      "mail": "luis.perez@example.com",
+      "commission_percentage": 5,
+      "password": "contraseña1617",
+      "rol": "profesional",
+      "services": [
+        {
+          "idService": 1,
+          "primary": 30,
+          "secondary": 40
+        },
+        {
+          "idService": 5,
+          "primary": 20,
+          "secondary": 40
+        }
+      ]
+    },
+    {
+      "dni": 89012345,
+      "name": "Lucía Castro",
+      "phone": "6667778888",
+      "mail": "lucia.castro@example.com",
+      "commission_percentage": 15,
+      "password": "contraseña1819",
+      "rol": "profesional",
+      "services": [
+        {
+          "idService": 2,
+          "primary": 30,
+          "secondary": 40
+        }
+      ]
+    },
+    {
+      "dni": 98765432,
+      "name": "Marta Ruiz",
+      "phone": "2224446666",
+      "mail": "marta.ruiz@example.com",
+      "commission_percentage": 30,
+      "password": "contraseña2021",
+      "rol": "profesional",
+      "services": [
+        {
+          "idService": 2,
+          "primary": 30,
+          "secondary": 40
+        },
+        {
+          "idService": 5,
+          "primary": 20,
+          "secondary": 40
+        }
+      ]
+    },
+    {
+      "dni": 87654321,
+      "name": "Javier González",
+      "phone": "8889990000",
+      "mail": "javier.gonzalez@example.com",
+      "commission_percentage": 30,
+      "password": "contraseña2223",
+      "rol": "profesional",
+      "services": [
+        {
+          "idService": 1,
+          "primary": 30,
+          "secondary": 40
+        },
+        {
+          "idService": 4,
+          "primary": 30,
+          "secondary": 0
+        }
+      ]
+    },
+    {
+      "dni": 44519856,
+      "name": "Santiago Paz",
+      "phone": "2244344322",
+      "mail": "santipaz19@gmail.com",
+      "commission_percentage": 10,
+      "password": "hola123",
+      "rol": "Master",
+      "services": [
+        {
+          "idService": 2,
+          "primary": 20,
+          "secondary": 40
+        },
+        {
+          "idService": 4,
+          "primary": 20,
+          "secondary": 40
+        }
+      ]
+    },
+    {
+      "dni": 1,
+      "name": "Bendahan",
+      "phone": "1212121",
+      "mail": "bendahan@gmail.com",
+      "commission_percentage": 0,
+      "password": "hola123",
+      "rol": "Master"
+    }
+  ]
+}

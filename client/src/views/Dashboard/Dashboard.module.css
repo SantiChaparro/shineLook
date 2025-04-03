@@ -1,0 +1,19 @@
+
+.blueContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .dashboardContent {
+    width:100%;
+    height: 100%;
+    flex: 1; /* Ajustamos el crecimiento del contenido para que ocupe el espacio disponible */
+    overflow-y: auto; /*Agregamos un desplazamiento vertical cuando sea necesario*/
+    overflow-x: hidden;
+    /* border: solid 3px red; */
+  }
+

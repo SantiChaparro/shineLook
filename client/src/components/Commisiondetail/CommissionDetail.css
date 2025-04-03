@@ -1,0 +1,53 @@
+.cellHead{
+   
+    font-weight:bold;
+    color:var(--dell-950) ;
+    font-size: 18px ;
+    position: sticky; 
+    z-index: 1;
+  top: 0; 
+  padding: 5px;
+  border-bottom: solid rgba(0, 0, 0, 0.3) 1px !important;
+  background-color: #fff;
+}
+
+.cellBody{
+  font-size: 12px;
+  padding: 10px;
+  border-bottom: solid rgba(0, 0, 0, 0.1) 1px !important;
+
+}
+
+:root {
+    /* Colores dell */
+    --dell-50: #f1fce9;
+    --dell-100: #e0f8cf;
+    --dell-200: #c2f2a4;
+    --dell-300: #9ae86e;
+    --dell-400: #77d942;
+    --dell-500: #57bf23;
+    --dell-600: #409818;
+    --dell-700: #337417;
+    --dell-800: #2e6119;
+    --dell-900: #284e19;
+    --dell-950: #112b08;
+  
+    /* Colores codGray */
+    --codGray-50: #f6f6f6;
+    --codGray-100: #e7e7e7;
+    --codGray-200: #d1d1d1;
+    --codGray-300: #b0b0b0;
+    --codGray-400: #888888;
+    --codGray-500: #6d6d6d;
+    --codGray-600: #5d5d5d;
+    --codGray-700: #4f4f4f;
+    --codGray-800: #454545;
+    --codGray-900: #3d3d3d;
+    --codGray-930: #161F1D;
+    --codGray-950: #0a0a0a;
+
+    --sb-track-color: var(--dell-50);
+    --sb-thumb-color: var(--dell-600);
+    --sb-size: 12px;
+
+  }

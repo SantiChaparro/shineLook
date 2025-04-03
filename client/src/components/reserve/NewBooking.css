@@ -1,0 +1,11 @@
+.stateTrue{
+   color:#03800b;
+   font-size: 12px;
+   margin-left: 2px;
+}
+
+.stateFalse{
+    color:red;
+    font-size: 12px;
+    margin-left: 2px;
+}
