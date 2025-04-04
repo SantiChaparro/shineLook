@@ -3,6 +3,7 @@ const { Sequelize } = require("sequelize");
 
 const fs = require('fs');
 const path = require('path');
+const Tenant = require("./models/Tenant");
 const {
   DB_USER, DB_PASSWORD, DB_HOST, DB_DEPLOY
 } = process.env;
@@ -35,8 +36,25 @@ let entries = Object.entries(sequelize.models);
 let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const { Appointment, Client, Payment, Professional, Service, Commission } = sequelize.models;
+const { Appointment, Client, Payment, Professional, Service, Commission,Tenants, TenantProfessional,TenantClient } = sequelize.models;
 
+Tenants.belongsToMany(Professional, { through:TenantProfessional });
+Professional.belongsToMany(Tenants, { through:TenantProfessional });
+
+Tenants.belongsToMany(Client, { through:TenantClient });
+Client.belongsToMany(Tenants, { through:TenantClient });
+
+Tenants.hasMany(Service);
+Service.belongsTo(Tenants);
+
+Tenants.hasMany(Commission);
+Commission.belongsTo(Tenants);
+
+Tenants.hasMany(Payment);
+Payment.belongsTo(Tenants);
+
+Tenants.hasMany(Appointment);
+Appointment.belongsTo(Tenants);
 
 Service.hasMany(Commission);
 Commission.belongsTo(Service);
