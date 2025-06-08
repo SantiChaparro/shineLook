@@ -1,10 +1,13 @@
 const {Service} = require('../db');
+const Tenant = require('../models/Tenant');
 
 
-const getAllServices = async () => {
+const getAllServices = async (tenantId) => {
+
 
     const services = await Service.findAll({
         where: {
+            TenantId: tenantId,
             isDeleted: false
         },
         order: [['service_name', 'ASC']]
@@ -19,11 +22,12 @@ const getAllServices = async () => {
 
 };
 
-const postNewService = async (service_name,cost,category) => {
+const postNewService = async (service_name,cost,category,tenantId) => {
 
-    const service = await Service.create({service_name,cost,category});
+    const service = await Service.create({service_name,cost,category,TenantId: tenantId});
 
     if(service){
+
         const successMessage = `El servicio ${service_name} fue creado con éxito`;
 
         return {successMessage,service};

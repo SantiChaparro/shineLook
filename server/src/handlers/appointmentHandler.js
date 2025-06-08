@@ -11,11 +11,11 @@ const {
 
 const postAppointment = async (req, res) => {
 
-    const { date, time, duration, deprived, dni, professionalDni, serviceId } = req.body;
+    const { date, time, duration, deprived, dni, professionalDni, serviceId, tenantId } = req.body;
 
     try {
 
-        const newAppointment = await postNewAppointment(date, time, duration, deprived, dni, professionalDni, serviceId);
+        const newAppointment = await postNewAppointment(date, time, duration, deprived, dni, professionalDni, serviceId, tenantId);
 
         if (newAppointment) {
             res.status(200).json(newAppointment);
@@ -28,10 +28,13 @@ const postAppointment = async (req, res) => {
 };
 
 const getAppointments = async (req, res) => {
+    const { tenantId } = req.params;
+    console.log('tenantId desde get appointments handler', tenantId);
+    
 
     try {
 
-        const appointments = await getAllAppointments();
+        const appointments = await getAllAppointments(tenantId);
       
         if (appointments) {
             res.status(200).json(appointments);

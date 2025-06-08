@@ -7,7 +7,7 @@ import LogoNegro from "../../assets/LogoNegro.PNG";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/system";
 import { styled, css } from "@mui/system";
-
+import { jwtDecode } from 'jwt-decode';
 import { urlApi } from "../../assets/urlApi.js";
 
 
@@ -16,10 +16,17 @@ const Landing = ({ onLogin, HandleVerifyUser }) => {
   const [errorState, setErrorState] = useState("");
 
   const handleSubmit = async (values, { setSubmitting }) => {
+    console.log("values", values);
+    
     try {
       const resp = await axios.post(`${urlApi}login`, values);
-
+      console.log('respuesta handlesubmit',resp.data);
+      console.log("respuesta handlesubmit", resp);
+      
+      
       if (resp.data.tokken) {
+        const decodedUser = jwtDecode(resp.data.tokken);
+        console.log("decodedUser", decodedUser);
         onLogin();
         HandleVerifyUser();
       }
@@ -408,7 +415,7 @@ const StyledBox = styled("div")({
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "flex-start",
-  borderRadius: "20px",
+  borderRadius: "50px",
   background: "var(--codGray-50)",
   boxShadow: "0 4px 24px 0 #112b09", // Cambié el color del sombreado
   height: "fit-content",

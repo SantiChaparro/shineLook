@@ -38,17 +38,33 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 const { Appointment, Client, Payment, Professional, Service, Commission,Tenants, TenantProfessional,TenantClient } = sequelize.models;
 
-Tenants.belongsToMany(Professional, { through:TenantProfessional });
-Professional.belongsToMany(Tenants, { through:TenantProfessional });
+Tenants.belongsToMany(Professional, { through:TenantProfessional,foreignKey: 'TenantId' });
+Professional.belongsToMany(Tenants, { through:TenantProfessional, foreignKey: 'ProfessionalDni' });
 
 Tenants.belongsToMany(Client, { through:TenantClient });
 Client.belongsToMany(Tenants, { through:TenantClient });
 
+TenantClient.belongsTo(Client, { foreignKey: 'ClientDni' });
+Client.hasMany(TenantClient, { foreignKey: 'ClientDni' });
+
+TenantClient.belongsTo(Tenants, { foreignKey: 'TenantId' });
+Tenants.hasMany(TenantClient, { foreignKey: 'TenantId' });
+
+TenantProfessional.belongsTo(Professional, { foreignKey: 'ProfessionalDni' });
+Professional.hasMany(TenantProfessional, { foreignKey: 'ProfessionalDni' });
+
+TenantProfessional.belongsTo(Tenants, { foreignKey: 'TenantId' });
+Tenants.hasMany(TenantProfessional, { foreignKey: 'TenantId' });
+
+
 Tenants.hasMany(Service);
 Service.belongsTo(Tenants);
 
-Tenants.hasMany(Commission);
-Commission.belongsTo(Tenants);
+// Tenants.hasMany(Commission);
+// Commission.belongsTo(Tenants);
+// si no anda borra foreignKey: 'TenantId'
+Tenants.hasMany(Commission, { foreignKey: 'TenantId',as: 'commissions' });
+Commission.belongsTo(Tenants, { foreignKey: 'TenantId',as: 'tenant' });
 
 Tenants.hasMany(Payment);
 Payment.belongsTo(Tenants);

@@ -86,6 +86,7 @@ const NewProfessionalForm = () => {
   const errorMessage = useSelector(
     (state) => state.newProfessional.errorMessage
   );
+  const tenantId = useSelector((state) => state.tenant.tenantId);
   const allServices = useSelector((state) => state.services.services);
   const [openSnackbar, setOpenSnackBar] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -94,7 +95,7 @@ const NewProfessionalForm = () => {
   
 
   useEffect(() => {
-    dispatch(getServices());
+    dispatch(getServices(tenantId));
    
 
     if (newProfessional.successMessage) {
@@ -158,7 +159,7 @@ const NewProfessionalForm = () => {
   const handleSubmit = (values, { resetForm }) => {
     const { name, dni, phone, mail, role, password, services } = values;
     dispatch(
-      postNewProfessional(dni, name, phone, mail, role, password, services)
+      postNewProfessional(dni, name, phone, mail, role, password, services,tenantId)
     );
     resetForm();
   };

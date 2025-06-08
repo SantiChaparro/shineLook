@@ -6,6 +6,7 @@ import { servicesSlice } from './slices/services/servicesSlice';
 import { newServiceSlice } from './slices/services/newServiceSlice';
 import { professionalsSlice } from './slices/professionals/professionalsSlice';
 import { newProfessionalSlice } from './slices/professionals/newProfessionalSlice';
+import { tenantSlice } from './slices/tenantsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -16,7 +17,8 @@ export const store = configureStore({
     services: servicesSlice.reducer,
     newService: newServiceSlice.reducer,
     professionals: professionalsSlice.reducer,
-    newProfessional: newProfessionalSlice.reducer
+    newProfessional: newProfessionalSlice.reducer,
+    tenant: tenantSlice.reducer,
   
   },
 })

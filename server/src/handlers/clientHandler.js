@@ -1,9 +1,10 @@
 const {getAllClients,newClient, foundClient, updatedClient} = require('../controllers/clientControllers');
 
 const getClients =async (req,res) => {
+    const {tenantId} = req.params;
 
     try {
-        const clients = await getAllClients();
+        const clients = await getAllClients(tenantId);
 
         if(clients){
 
@@ -21,11 +22,11 @@ const getClients =async (req,res) => {
 
 const postClient = async (req,res) => {
 
-    const {dni,name,DateOfBirth,phone,mail} = req.body;
+    const {dni,name,DateOfBirth,phone,mail,tenantId} = req.body;
 
     try {
         
-        const client = await newClient(dni,name,DateOfBirth,phone,mail);
+        const client = await newClient(dni,name,DateOfBirth,phone,mail,tenantId);
 
         if(client){
             res.status(200).json(client);

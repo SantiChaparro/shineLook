@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { cleanMessages, postNewClient, } from "../../redux/slices/appointments/thunks";
+import { storageTenantId } from "../../redux/slices/tenantsSlice";
 import styles from "./NewCustomerForm.module.css";
 
 
@@ -60,10 +61,13 @@ const validate = (values) => {
 const NewCustomerForm = () => {
   const newClient = useSelector((state) => state.newClient);
   const errorMessage = useSelector((state) => state.newClient.errorMessage);
+  const tenantId = useSelector((state) => state.tenant.tenantId);
   const dispatch = useDispatch();
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarType, setSnackbarType] = useState("success");
+  console.log('tenantId',tenantId);
+  
 
   useEffect(() => {
     if ((newClient && newClient.newClient.successMessage) || errorMessage) {
@@ -96,7 +100,8 @@ const NewCustomerForm = () => {
         values.name,
         values.DateOfBirth,
         values.phone,
-        values.mail
+        values.mail,
+        tenantId
       )
     );
     resetForm();

@@ -1,10 +1,16 @@
-const {Client}= require ('../db')
+const { where } = require('sequelize');
+const {Client,TenantClient}= require ('../db')
 
-const getAllClients = async () => {
+const getAllClients = async (tenantId) => {
 
-    const clients = await Client.findAll(
+    const clients = await TenantClient.findAll(
         {
-            order: [['name', 'ASC']] 
+            where: {TenantId: tenantId},
+            include: {
+                model: Client,
+                attributes: ['dni', 'name', 'DateOfBirth', 'phone', 'mail']
+            },
+            order: [[Client, 'name', 'ASC']]
         }
     );
 
@@ -18,25 +24,48 @@ const getAllClients = async () => {
 };
 
 
-const newClient = async (dni,name,DateOfBirth,phone,mail) => {
 
-    const existingClient = await Client.findByPk(dni);
 
-    if(existingClient){
+const newClient = async (dni, name, DateOfBirth, phone, mail, tenantId) => {
+  // 1. Verificamos si ya existe el cliente
+  const existingClient = await Client.findByPk(dni);
 
-        throw new Error('Cliente ya registrado');
+  if (existingClient) {
+    // 2. Verificamos si ya está asociado al tenant
+    const alreadyLinked = await TenantClient.findOne({
+      where: {
+        ClientDni: dni,
+        TenantId: tenantId
+      }
+    });
 
-    }else{
-
-        const client = await Client.create({dni,name,DateOfBirth,phone,mail});
-
-        if(client){
-            const successMessage = `Cliente ${name} registrado con éxito`;
-            return {successMessage,client};
-        }
-
+    if (alreadyLinked) {
+      throw new Error('El cliente ya registrado');
     }
+
+    // 3. cliente existe pero no está asociado al tenant
+    await TenantClient.create({
+      ClientDni: dni,
+      TenantId: tenantId
+    });
+
+    const successMessage = `Cliente registrado con éxito`;
+    return { successMessage, client: existingClient };
+
+  } else {
+    // 4. Creamos el cliente y luego lo asociamos
+    const client = await Client.create({ dni, name, DateOfBirth, phone, mail });
+
+    await TenantClient.create({
+      ClientDni: dni,
+      TenantId: tenantId
+    });
+
+    const successMessage = `Cliente ${name} registrado y vinculado al tenant con éxito`;
+    return { successMessage, client };
+  }
 };
+
 
 const foundClient = async (dni) => {
 

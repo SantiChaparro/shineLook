@@ -2,9 +2,12 @@ const {getAllProfessionals,postNewProfessional,getProfessionalById,updatedProfes
 
 const getProfecionals = async (req,res) => {
 
+     const {tenantId} = req.query;
+     console.log("tenantId", tenantId);
+
     try {
         
-        const professional = await getAllProfessionals();
+        const professional = await getAllProfessionals(tenantId);
 
         if(professional){
             res.status(200).json(professional);
@@ -18,7 +21,7 @@ const getProfecionals = async (req,res) => {
 
 const postProfecionals = async (req,res) => {
 
-    const {dni,name,phone,mail,role,password,services} = req.body;
+    const {dni,name,phone,mail,role,password,services,tenantId} = req.body;
     
   
 
@@ -26,7 +29,7 @@ const postProfecionals = async (req,res) => {
 
     try {
         
-        const professional = await postNewProfessional(dni,name,phone,mail,role,password,services);
+        const professional = await postNewProfessional(dni,name,phone,mail,role,password,services,tenantId);
 
         if(professional){
             res.status(200).json(professional);

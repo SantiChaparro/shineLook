@@ -45,12 +45,16 @@ const validate = (values) => {
 
 const NewServiceForm = () => {
   const { NewService } = useSelector((state) => state.newService);
+  const tenantId = useSelector((state) => state.tenant.tenantId);
   const errorMessage = "";
 
   const dispatch = useDispatch();
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarType, setSnackbarType] = useState("success");
+
+  console.log('tenantId',tenantId);
+  
 
   useEffect(() => {
     if ((NewService && NewService.successMessage) || errorMessage) {
@@ -73,7 +77,7 @@ const NewServiceForm = () => {
   };
 
   const handleSubmit = (values, { resetForm }) => {
-    dispatch(postNewService(values.service_name, values.cost, values.category));
+    dispatch(postNewService(values.service_name, values.cost, values.category,tenantId));
     resetForm();
   };
 

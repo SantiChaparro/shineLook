@@ -4,7 +4,7 @@ const appointmentRouter = Router();
 
  appointmentRouter.get('/client',getAppointmentByDni);
  appointmentRouter.post('/',postAppointment); 
- appointmentRouter.get('/',getAppointments);
+ appointmentRouter.get('/byTenant/:tenantId',getAppointments);
  appointmentRouter.patch('/paid',paidAppointment);
  appointmentRouter.get('/:id',getAppointment);
  appointmentRouter.patch('/:id',updateAppointment);

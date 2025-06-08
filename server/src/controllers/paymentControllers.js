@@ -1,15 +1,25 @@
-const { Payment, Appointment, Commission, Professional, Service } = require('../db');
+const { Payment, Appointment, Commission, Professional, Service, Tenants } = require('../db');
 const { calcCommission } = require('../assets/funtions/calcCommission');
 
-const postNewPayment = async (payment_day, amount, payment_mode, appointmentsId, completePayment, depositAmount, isDeposit, attended) => {
+const postNewPayment = async (payment_day, amount, payment_mode, appointmentsId, completePayment, depositAmount, isDeposit, attended, tenantId) => {
     let amountValues = parseFloat(depositAmount);
-
+    console.log('tenantId desde postNewPayment controller', tenantId);
+    console.log('appointmentsids desde postNewPayment controller', appointmentsId);
+    
+    
     try {
         if (attended) {
+            console.log('array de appointsments',appointmentsId);
+            
             const appointmentId = appointmentsId[0]; // Se asume que appointmentsId contiene un solo ID en este caso
             const appointment = await Appointment.findByPk(appointmentId, {
                 include: [{ model: Professional }, { model: Service }, { model: Payment }]
             });
+            console.log('tenantId antes de findbypk',tenantId);
+            
+            const tenant = await Tenants.findByPk(tenantId);
+            console.log('tenant desde postNewPayment controller', tenant);
+            
 
             if (!appointment) {
                 throw new Error(`No se encontró la cita con el ID ${appointmentId}`);
@@ -32,12 +42,15 @@ const postNewPayment = async (payment_day, amount, payment_mode, appointmentsId,
                 await postCommission.setProfessional(appointment.Professional);
                 await postCommission.setService(appointment.Service);
                 await postCommission.setAppointment(appointment);
+                await postCommission.setTenant(tenant);
             } else if (attended === 'No') {
 
                 let remainingAmount = 0;
 
                 const paymentsForAppointment = appointment.Payments || [];
                 paymentsForAppointment.forEach(payment => {
+                    console.log('payment desde postNewPayment controller', payment);
+                    
                     if (!payment.paid) {
                         remainingAmount += payment.depositAmount || 0;
                     }
@@ -50,6 +63,8 @@ const postNewPayment = async (payment_day, amount, payment_mode, appointmentsId,
         }
 
         if (isDeposit) {
+            console.log('tenantid desde pago seña',tenantId);
+            
             // Crear un pago con el monto total y el depósito
             const payment = await Payment.create({
                 payment_day,
@@ -57,10 +72,13 @@ const postNewPayment = async (payment_day, amount, payment_mode, appointmentsId,
                 payment_mode,
                 depositAmount: amountValues,
                 isDeposit,
-                state: 'Pendiente'
+                state: 'Pendiente',
+                TenantId: tenantId
             });
 
             if (payment) {
+                console.log('payment de la seña', payment);
+                
                 await Promise.all(appointmentsId.map(async (appointmentId) => {
                     const appointment = await Appointment.findByPk(appointmentId, {
                         include: [{ model: Professional }, { model: Service }]
@@ -118,7 +136,8 @@ const postNewPayment = async (payment_day, amount, payment_mode, appointmentsId,
                         amount: totalAmount,
                         depositAmount: depositToApply,
                         payment_mode,
-                        state: 'Pendiente'
+                        state: 'Pendiente',
+                        TenantId: tenantId
                     });
 
                     // Actualizar el valor de amountValues restando depositToApply
@@ -139,7 +158,8 @@ const postNewPayment = async (payment_day, amount, payment_mode, appointmentsId,
                         amount: totalAmount,
                         depositAmount: amountValues,
                         payment_mode,
-                        state: 'Pendiente'
+                        state: 'Pendiente',
+                        TenantId: tenantId
                     });
 
                     // Asociar el pago con la cita

@@ -7,6 +7,7 @@ const appointmentRouter = require ('../routes/appointmentRouter');
 const paymentRouter = require ('../routes/paymentRouter');
 const professionalRouter = require ('../routes/professionalRouter');
 const commissionRouter = require('../routes/commissionRouter');
+const tenantRouter = require ('../routes/tenantRouter');
 const router = Router();
 
 router.use('/login',loginRouter);
@@ -16,5 +17,6 @@ router.use('/appointment',appointmentRouter);
 router.use('/professional',professionalRouter);
 router.use('/payment',paymentRouter);
 router.use('/commission',commissionRouter);
+router.use('/tenant',tenantRouter);
 
 module.exports = router;

@@ -7,7 +7,7 @@ import { css, display, styled, ThemeProvider, width } from "@mui/system";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { urlApi } from "../../assets/urlApi";
 import GroupTable from "./GroupTable";
 import Checkbox from "@mui/material/Checkbox";
@@ -40,6 +40,9 @@ const DetailAppointment = ({
     appointmentsId: [],
     completePayment: true,
   });
+  const {tenantId} = useSelector((state) => state.tenant);
+  console.log('tenantid desde detail appointment', tenantId);
+  
 
   const dispatch = useDispatch();
 
@@ -151,14 +154,17 @@ const DetailAppointment = ({
   const handlePay = async (e) => {
     e.preventDefault();
 
-    const updatedPaid = { ...paid, appointmentsId: appointmentsToPay };
-    const updatedPaid2 = { ...paid2, appointmentsId: appointmentsToPay };
+    const updatedPaid = { ...paid, appointmentsId: appointmentsToPay, tenantId: tenantId };
+    const updatedPaid2 = { ...paid2, appointmentsId: appointmentsToPay, tenantId: tenantId };
+console.log("Datos enviados:", updatedPaid);
 
     try {
       if (twoPaid) {
       }
+      console.log("Datos enviados:", updatedPaid);
       const response = await axios.post(`${urlApi}payment`, updatedPaid);
       if (twoPaid) {
+        console.log("Datos enviados:", updatedPaid);
         const response = await axios.post(`${urlApi}payment`, updatedPaid2);
       }
 
@@ -171,7 +177,7 @@ const DetailAppointment = ({
 
   const handleAttended = async (e) => {
     try {
-      const response = await axios.post(`${urlApi}payment`, attended);
+      const response = await axios.post(`${urlApi}payment`, {attended:attended, tenantId: tenantId});
 
       // await paymentSuccess(eventSearch);
       closeModal();

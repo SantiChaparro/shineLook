@@ -27,6 +27,8 @@ const Professionals = () => {
     (state) => state.professionals
   );
   const services = useSelector((state) => state.services.services);
+  const tenantId = useSelector((state) => state.tenant.tenantId);
+  console.log("tenantId", tenantId);
   const dispatch = useDispatch();
   const [successMessage, setSuccessMessage] = useState("");
   const [openSnackBar, setOpenSnackBar] = useState(false);
@@ -41,9 +43,16 @@ const Professionals = () => {
   });
   const [isEditing, setIsEditing] = useState(false);
 
+  console.log(professionalData);
+  console.log(professionalDataToUpdate);
+  console.log(editingProfessional);
+  
+  
+  
+
   useEffect(() => {
-    dispatch(getProfessionals());
-    dispatch(getServices());
+    dispatch(getProfessionals(tenantId));
+    dispatch(getServices(tenantId));
   }, [dispatch]);
 
   const handleEdit = (professional) => {
@@ -137,7 +146,7 @@ const Professionals = () => {
     }
     setEditingProfessional(null);
     setIsEditing(false);
-    await dispatch(getProfessionals());
+    await dispatch(getProfessionals(tenantId));
   };
 
   const handleCancel = () => {
@@ -189,7 +198,7 @@ const Professionals = () => {
                       justifyContent: "center",
                       alignItems: "center",
                     }}>
-                    {editingProfessional === professional ? (
+                    {editingProfessional === professional.Professional ? (
                       <div
                         style={{
                           width: "100%",
@@ -349,15 +358,15 @@ const Professionals = () => {
                           variant="h5"
                           component="div"
                           sx={{ fontSize: "1rem" }}>
-                          {professional.name}
+                          {professional.Professional.name}
                         </Typography>
                         <Typography
                           color="text.secondary"
                           component="div"
                           sx={{ fontSize: "1rem" }}>
-                          Dni: {professional.dni}
+                          Dni: {professional.Professional.dni}
                         </Typography>
-                        <EditButton onClick={() => handleEdit(professional)}>
+                        <EditButton onClick={() => handleEdit(professional.Professional)}>
                           Editar
                         </EditButton>
                       </>
