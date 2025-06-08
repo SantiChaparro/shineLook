@@ -15,6 +15,7 @@ import Services from "../Services/Services";
 import { css, fontWeight, styled } from "@mui/system";
 import styles from "./Dashboard.module.css";
 import { Divider } from "@mui/material";
+import { jwtDecode } from 'jwt-decode';
 
 const Dashboard = ({ drawerWidth, appHeight }) => {
   const [opcionSeleccionada, setOpcionSeleccionada] = useState("clientes");
@@ -23,10 +24,20 @@ const Dashboard = ({ drawerWidth, appHeight }) => {
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState(null);
 
+//const user = JSON.parse(localStorage.getItem("loggedUser"));
+// const decodedUser = jwtDecode(localStorage.getItem("tokken"));
+ // console.log('decodeduder',decodedUser);
 
 
-  const user = JSON.parse(localStorage.getItem("loggedUser"));
-  const profesionalRol = user.professional.role;
+
+ console.log(localStorage);
+   const loggedUser = localStorage.getItem("loggedUser");
+   console.log('user',loggedUser);
+  
+   const user = jwtDecode(loggedUser);
+   console.log('decodeduser',user);
+  
+  const profesionalRol = user.role;
 
 
   const handleFilterChange = (event) => {

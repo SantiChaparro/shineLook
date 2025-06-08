@@ -10,12 +10,25 @@ const postPassword = async (req, res) => {
     try {
 
         const professional = await validatePassword({ dni, password });
+        console.log('response desde handler',professional);
+        
 
         if (professional) {
 
-            const tokken = generateToken(professional)
+            const tokken =generateToken(professional)
+            console.log(tokken);
+            console.log(professional);
+            
 
-            res.status(200).json({ tokken: tokken, professional: professional });
+            if(professional.tenantOptions)
+            {
+                res.status(200).json({ tokken: tokken, tenants:professional.tenantOptions});
+            }
+            else{
+                res.status(200).json({ tokken: tokken, tenants:professional.tenantId});
+            }
+
+            
         }
 
 

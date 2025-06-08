@@ -24,6 +24,10 @@ const NewBooking = ({ openBooking, setOpenBooking, events, dateView }) => {
 
   const { professionals } = useSelector((state) => state.professionals);
   const { services } = useSelector((state) => state.services);
+  const { tenantId } = useSelector((state) => state.tenant);
+ console.log('services',services);
+ console.log('professionals',professionals);
+ 
  
 
   const hoursWork = { start: "08:00", end: "21:00" };
@@ -295,6 +299,8 @@ const NewBooking = ({ openBooking, setOpenBooking, events, dateView }) => {
   };
 
   const [serviceFilter, setServiceFilter] = useState([]);
+  console.log('servicefilter',serviceFilter);
+  
 
   
 
@@ -361,13 +367,17 @@ const NewBooking = ({ openBooking, setOpenBooking, events, dateView }) => {
   }, [newAppointment.date, date]);
 
   const filterProfessionalByService = (idService) => {
+    console.log('idservice',idService);
+    
     if (professionals && professionals.length > 0) {
       const filter = professionals.filter((prof) => {
-        if (prof.services && prof.services.length > 0) {
-          return prof.services.some(
+        if (prof.Professional.services && prof.Professional.services.length > 0) {
+          return prof.Professional.services.some(
             (service) => service.idService === Number(idService)
           );
         }
+        
+        
       });
 
       setServiceFilter(filter);
@@ -445,13 +455,17 @@ const NewBooking = ({ openBooking, setOpenBooking, events, dateView }) => {
 
   const handleSelectProfessional = async (e) => {
     const dniProf = e.target.value;
-
+    console.log('dniprof',dniProf);
+    
     if (Number(dniProf) !== 0) {
       const findProfessional = await professionals.filter(
-        (prof) => prof.dni === Number(dniProf)
+        (prof) => prof.Professional.dni === Number(dniProf)
+        
       );
+      console.log('findprofessional',findProfessional);
+        
 
-      const containSecondary = findProfessional[0].services.some(
+      const containSecondary = findProfessional[0].Professional.services.some(
         (service) =>
           service.idService == newAppointment.serviceId && service.secondary > 0
       );
@@ -514,13 +528,14 @@ const NewBooking = ({ openBooking, setOpenBooking, events, dateView }) => {
   const handleSubmit = async (e) => {
     setLoading(true)
     e.preventDefault();
-    const response = await axios.post(`${urlApi}appointment`, newAppointment);
+    const response = await axios.post(`${urlApi}appointment`, {...newAppointment,tenantId: tenantId});
 
     setPaid({ ...paid, appointmentsId: [response.data.newAppointment.id] });
     const result = response.data;
     const response2 = await axios.post(`${urlApi}payment`, {
       ...paid,
       appointmentsId: [response.data.newAppointment.id],
+      tenantId: tenantId,
     });
     if(response2) {
       setLoading(false);
@@ -546,7 +561,7 @@ const NewBooking = ({ openBooking, setOpenBooking, events, dateView }) => {
       message: "",
     });
     setStatusCheck(false);
-    dispatch(getAppointments());
+    dispatch(getAppointments(tenantId));
     handleClose();
     return result;
   };
@@ -734,8 +749,8 @@ const NewBooking = ({ openBooking, setOpenBooking, events, dateView }) => {
                       }
                       helperText={error.professional}>
                       {serviceFilter.map((prof) => (
-                        <MenuItem key={prof.dni} value={prof.dni} id={prof.dni}>
-                          {prof.name}
+                        <MenuItem key={prof.Professional.dni} value={prof.Professional.dni} id={prof.Professional.dni}>
+                          {prof.Professional.name}
                         </MenuItem>
                       ))}
                     </TextField>

@@ -23,13 +23,16 @@ import { Link, Route, Routes, useLocation } from "react-router-dom";
 const drawerWidth = 180;
 const appHeight = 0;
 
-export default function SideBar({ onLogout }) {
+export default function SideBar({ onLogout,selectedtenant }) {
   const { pathname } = useLocation();
 
   const [open, setOpen] = React.useState(false);
   const [clientesOpen, setClientesOpen] = React.useState(false);
   const [serviciosOpen, setServiciosOpen] = React.useState(false);
   const [profesionalesOpen, setProfesionalesOpen] = React.useState(false);
+
+  console.log("selectedTenant desde el sidebar", selectedtenant);
+  
 
   const handleOtherItemClick = () => {
     setOpen(false);

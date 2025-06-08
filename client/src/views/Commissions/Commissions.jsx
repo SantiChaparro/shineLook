@@ -13,10 +13,13 @@ import { css, fontWeight, styled } from "@mui/system";
 import axios from "axios";
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
+import {useSelector } from "react-redux";
 import commissionsPerProfessional from "../../assets/functions/commissionsPerProfessional";
 import { urlApi } from "../../assets/urlApi";
 import CommissionDetail from "../../components/Commisiondetail/CommissionDetail";
 import "./Commissions.css";
+
+import { use } from "react";
 
 const Commissions = ({
   selectedDate,
@@ -30,6 +33,7 @@ const Commissions = ({
   const [totalToRenderProfessional, setTotalTorenderProfessional] = useState(
     []
   );
+  const {tenantId} = useSelector((state) => state.tenant);
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalCash, setTotalCash] = useState(0);
   const [totalOthers, setTotalOthers] = useState(0);
@@ -53,7 +57,7 @@ const Commissions = ({
    
 
     const fetchingCommissions = async () => {
-      const resp = await axios.post(`${urlApi}commission`, dateData);
+      const resp = await axios.post(`${urlApi}commission`, {date: dateData.date,tenantId: tenantId});
    
 
       // Filtrar el array resp.data en dos arrays separados
@@ -109,7 +113,7 @@ const Commissions = ({
   }, [selectedFilter, renderFilterCommissions]);
 
   const handleMonthCommissions = async () => {
-    const resp = await axios.get(`${urlApi}commission`);
+    const resp = await axios.get(`${urlApi}commission/${tenantId}`);
 
     if (resp.data) {
       const totalCommissions = resp.data;

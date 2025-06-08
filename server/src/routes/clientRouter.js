@@ -3,7 +3,7 @@ const { getClients, postClient, updateClient, getClientById } = require('../hand
 const clientRouter = Router();
 
 
-clientRouter.get('/',getClients);
+clientRouter.get('/byTenant/:tenantId',getClients);
 clientRouter.post('/',postClient);
 clientRouter.patch('/:dni',updateClient);
 clientRouter.get('/:dni',getClientById); 

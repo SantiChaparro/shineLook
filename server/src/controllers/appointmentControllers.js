@@ -12,7 +12,8 @@ const postNewAppointment = async (
   deprived,
   dni,
   professionalDni,
-  serviceId
+  serviceId,
+  tenantId
 ) => {
   const existingClient = await Client.findByPk(dni);
   const existService = await Service.findByPk(serviceId);
@@ -25,6 +26,7 @@ const postNewAppointment = async (
       duration,
       deprived,
       cost,
+      TenantId: tenantId,
     });
 
     if (newAppointment) {
@@ -45,9 +47,14 @@ const postNewAppointment = async (
     throw new Error("Cliente no figura en base de datos");
   }
 };
-const getAllAppointments = async () => {
+const getAllAppointments = async (tenantId) => {
+  console.log('tenantId desde getAllAppointments controller', tenantId);
+  
   try {
     const appointments = await Appointment.findAll({
+      where: {
+        TenantId: tenantId, // Asegúrate de filtrar por el TenantId
+      },
       include: [
         {
           model: Client,

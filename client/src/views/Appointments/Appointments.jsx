@@ -17,12 +17,14 @@ import { calcPartial } from "../../assets/functions/calcPartial";
 import { fontWeight } from "@mui/system";
 import Reference from "../../components/reference/Reference";
 
+
 dayjs.locale("es");
 
 const Appointments = () => {
   const dispatch = useDispatch();
   const { appointments } = useSelector((state) => state.appointment);
   const { professionals } = useSelector((state) => state.professionals);
+  const { tenantId } = useSelector((state) => state.tenant);
   const [open, setOpen] = useState(false);
   const [eventSelected, setEventSelected] = useState([]);
   const [eventSearch, setEventSearch] = useState({});
@@ -33,14 +35,19 @@ const Appointments = () => {
   const [reloadTable, setReloadTable] = useState(false);
   const localizer = dayjsLocalizer(dayjs);
 
-  useEffect(() => {
-    dispatch(getAppointments());
-    dispatch(getProfessionals());
-    dispatch(getServices());
-  }, [dispatch]);
+  console.log('tenant id desde appointments',tenantId);
+  console.log('citas', appointments);
+  
+  
 
   useEffect(() => {
-    dispatch(getAppointments());
+    dispatch(getAppointments(tenantId));
+    dispatch(getProfessionals(tenantId));
+    dispatch(getServices(tenantId));
+  }, [dispatch,tenantId]);
+
+  useEffect(() => {
+    dispatch(getAppointments(tenantId));
   }, [eventSelected]);
 
   useEffect(() => {
@@ -121,7 +128,7 @@ const Appointments = () => {
 
   const paymentSuccess = async (event) => {
     try {
-      await dispatch(getAppointments());
+      await dispatch(getAppointments(tenantId));
 
       await searchEvents(event);
     } catch (error) {
@@ -192,10 +199,17 @@ const Appointments = () => {
           onNavigate={(newDate) => setDate(dayjs(newDate))}
           onSelectEvent={(event) => loadEventSearch(event)}
           onSelectSlot={handleSelectSlot}
-          resources={professionals}
+         // resources={professionals}
+         resources={professionals.map((prof) => ({
+          resourceId: prof.Professional.dni, // Extraer el dni del objeto Professional
+          resourceTitle: prof.Professional.name, // Extraer el nombre del objeto Professional
+        }))}
+          // resourceAccessor="professionalDni"
+          // resourceIdAccessor="dni"
+          // resourceTitleAccessor="name"
           resourceAccessor="professionalDni"
-          resourceIdAccessor="dni"
-          resourceTitleAccessor="name"
+          resourceIdAccessor="resourceId" // Cambiar a resourceId
+          resourceTitleAccessor="resourceTitle" // Cambiar a resourceTitle
           timeslots={1}
           min={new Date(2024, 2, 25, 8, 0, 0)}
           max={new Date(2024, 2, 25, 21, 0, 0)}

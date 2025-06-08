@@ -17,6 +17,7 @@ import { css, styled, ThemeProvider } from "@mui/system";
 
 const Customers = () => {
   const { customers } = useSelector((state) => state.customer);
+  const tenantId = useSelector((state) => state.tenant.tenantId);
   const dispatch = useDispatch();
 
   const [editingCustomer, setEditingCustomer] = useState(null);
@@ -31,9 +32,15 @@ const Customers = () => {
   const [openSnackBar, setOpenSnackBar] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+console.log('clientes', customers);
+
+
+
   useEffect(() => {
-    dispatch(getCustomers());
-  }, [dispatch]);
+  //  console.log("tenantId desde customers", tenantId);
+    
+    dispatch(getCustomers(tenantId));
+  }, [dispatch,tenantId]);
 
   useEffect(() => {
     if (editingCustomer === null) {
@@ -184,13 +191,13 @@ const Customers = () => {
                             variant="h5"
                             component="div"
                             sx={{ fontSize: "1rem" }}>
-                            {customer.name}
+                            {customer.Client.name}
                           </Typography>
                           <Typography
                             color="text.secondary"
                             component="div"
                             sx={{ fontSize: "1rem" }}>
-                            Dni: {customer.dni}
+                            Dni: {customer.Client.dni}
                           </Typography>
                           {/* Agrega más detalles del cliente aquí según tu estructura de datos */}
                           <EditButton onClick={() => handleEdit(customer)}>

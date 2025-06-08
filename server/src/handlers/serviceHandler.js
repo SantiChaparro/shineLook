@@ -7,8 +7,11 @@ const {
 } = require("../controllers/serviceControllers");
 
 const getServices = async (req, res) => {
+  const { tenantId } = req.query;
+  console.log("tenantId", tenantId);
+  
   try {
-    const services = await getAllServices();
+    const services = await getAllServices(tenantId);
 
     if (services) {
       res.status(200).json(services);
@@ -19,10 +22,10 @@ const getServices = async (req, res) => {
 };
 
 const postService = async (req, res) => {
-  const { service_name, cost, category } = req.body;
+  const { service_name, cost, category, tenantId } = req.body;
 
   try {
-    const service = await postNewService(service_name, cost, category);
+    const service = await postNewService(service_name, cost, category, tenantId);
 
     if (service) {
       res.status(200).json(service);

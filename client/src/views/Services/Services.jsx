@@ -36,10 +36,12 @@ const Services = () => {
   const [severity, setSeverity] = useState("success");
   const [confirmDelete, setConfirmDelete] = useState(false); // Estado para controlar si se muestra la alerta de eliminación
   const [serviceToDelete, setServiceToDelete] = useState(null); // Estado para almacenar el servicio que se va a eliminar
+  const tenantId = useSelector((state) => state.tenant.tenantId);
+  console.log("tenantId", tenantId);
 
   useEffect(() => {
-    dispatch(getServices());
-  }, [dispatch]);
+    dispatch(getServices(tenantId));
+  }, [dispatch,tenantId]);
 
   const [allServices, setAllServices] = useState([]);
   const [editingService, setEditingService] = useState(null);

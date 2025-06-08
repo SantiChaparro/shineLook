@@ -26,6 +26,8 @@ import { css, styled } from "@mui/system";
 import { calcPartial } from "../../assets/functions/calcPartial";
 import statusAppointmentColor from "../../assets/functions/statusAppointmentColor";
 import Badge from "../Badge/Badge";
+import {jwtDecode} from "jwt-decode";
+
 
 const GroupTable = ({
   event,
@@ -59,6 +61,13 @@ const GroupTable = ({
   const [selectedAppointments, setSelectedAppointments] = useState([]);
 
   const rol = JSON.parse(localStorage.getItem("loggedUser"));
+  if (rol && rol.tokken) {
+    const decodedToken = jwtDecode(rol.tokken);
+    console.log('role',rol);
+    
+    console.log("Decoded Token:", decodedToken);
+  }
+  
 
   useEffect(() => {
     setEventTable(event);
@@ -511,7 +520,7 @@ const GroupTable = ({
                       ) : app.attended == "Sin especificar" ? (
                         <IconButton
                           disabled={
-                            rol.professional.role !== "Master" &&
+                            rol.tokken.role !== "Master" &&
                             calcPartial(app.payments) > 0
                           }
                           onClick={() => deleteAppointment(app.idAppointment)}>

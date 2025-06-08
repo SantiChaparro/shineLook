@@ -1,8 +1,11 @@
+const { where } = require('sequelize');
 const { Commission, Professional, Service, Payment, Appointment,Client } = require('../db');
 
-const totalCommissions = async () => {
+const totalCommissions = async (tenantId) => {
+    console.log('tenantId desde totalCommissions controller', tenantId);
 
     const commissions = await Commission.findAll({
+        where:{TenantId: tenantId},
         include: [
             {
                 model: Professional,
@@ -36,11 +39,12 @@ const totalCommissions = async () => {
 };
 
 
-const allCommisssions = async (date) => {
+const allCommisssions = async (date,tenantId) => {
 
     const commissions = await Commission.findAll({
         where: {
-            date: date
+            date: date,
+            TenantId: tenantId
         },
         include: [
             {
