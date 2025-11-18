@@ -14,8 +14,9 @@ import { grey } from "@mui/material/colors";
 import { css, styled } from "@mui/system";
 import * as React from "react";
 import logoBlanco from "../../assets/LogoBlanco.PNG";
-import Appointments from "../../views/Appointments/Appointments";
+import Turnero from "../../views/Turnero/Turnero";
 import Dashboard from "../../views/Dashboard/Dashboard";
+import {jwtDecode} from 'jwt-decode';
 
 
 import { Link, Route, Routes, useLocation } from "react-router-dom";
@@ -32,6 +33,14 @@ export default function SideBar({ onLogout,selectedtenant }) {
   const [profesionalesOpen, setProfesionalesOpen] = React.useState(false);
 
   console.log("selectedTenant desde el sidebar", selectedtenant);
+
+  const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
+  console.log("Usuario logueado desde el sidebar", loggedUser);
+  const token = loggedUser?.tokken
+  const decodedToken = jwtDecode(token);
+  console.log("Decoded Token desde el sidebar", decodedToken.role);
+  const role = decodedToken.role;
+  
   
 
   const handleOtherItemClick = () => {
@@ -46,143 +55,153 @@ export default function SideBar({ onLogout,selectedtenant }) {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      <CssBaseline />
-      
+ 
 
-      <Drawer
-        sx={{
+  <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+    <CssBaseline />
+
+    <Drawer
+      sx={{
+        width: drawerWidth,
+        zIndex: "0",
+        flexShrink: 0,
+        "& .MuiDrawer-paper": {
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignContent: "center",
+          alignItems: "center",
           width: drawerWidth,
-          zIndex: "0",
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignContent: "center",
-            alignItems: "center",
-            width: drawerWidth,
-            boxSizing: "border-box",
-            backgroundColor: codGray[930],
-            border: "none",
-          },
+          boxSizing: "border-box",
+          backgroundColor: codGray[930],
+          border: "none",
+        },
+      }}
+      variant="permanent"
+      anchor="left"
+    >
+      <div
+        style={{
+          position: "absolute",
+          top: "10px",
+          padding: "10px",
+          width: "100%",
         }}
-        variant="permanent"
-        anchor="left">
-        <div
+      >
+        <img
+          src={logoBlanco}
           style={{
-            position: "absolute",
-            top: "10px",
-            padding: "10px",
-            width:'100%',
-          }}>
-        
-          <img
-            src={logoBlanco}
+            width: "100%",
+            color: dell[500],
+          }}
+          alt="Logo Blanco"
+        />
+      </div>
+      <Divider />
+      <List>
+        <ListItem
+          key={"Appointments"}
+          disablePadding
+          sx={{
+            bgcolor: pathname === "/" ? dell[500] : null,
+            width: "100%",
+          }}
+        >
+          <Link
+            to="/"
             style={{
+              textDecoration: "none",
+              color: pathname === "/" ? dell[950] : dell[50],
               width: "100%",
-              color:dell[500],
             }}
-            alt="Logo Blanco"
-          />
-        </div>
-        <Divider />
-        <List>
-          <ListItem
-            key={"Appointments"}
-            disablePadding
-            sx={{
-              bgcolor: pathname === "/" ? dell[500] : null,
-              width: "100%",
-            }}>
-            <Link
-              to="/"
-              style={{
-                textDecoration: "none",
-                color: pathname === "/" ? dell[950] : dell[50],
-                width: "100%",
-              }}>
-              <ListItemButton
-                sx={{ padding: "6px 12px" }}
-                onClick={handleOtherItemClick}>
-                <ListItemIcon sx={{ minWidth: "36px" }}>
-                  <HomeIcon
-                    color="primary"
-                    sx={{ color: pathname === "/" ? dell[950] : dell[50] }}
-                  />
-                </ListItemIcon>
-                <ListItemText primary={"Turnos"} />
-              </ListItemButton>
-            </Link>
-          </ListItem>
-
-          <ListItem
-            key={"Dashboard"}
-            disablePadding
-            sx={{
-              bgcolor: pathname === "/Dashboard" ? dell[500] : null,
-              width: "100%",
-            }}>
+          >
             <ListItemButton
-              sx={{
-                padding: "6px 12px",
-                color: pathname === "/Dashboard" ? dell[950] : dell[50],
-                width: "100%",
-              }}
-              component={Link}
-              to="/Dashboard">
+              sx={{ padding: "6px 12px" }}
+              onClick={handleOtherItemClick}
+            >
               <ListItemIcon sx={{ minWidth: "36px" }}>
-                <DashboardIcon
+                <HomeIcon
                   color="primary"
-                  sx={{
-                    color: pathname === "/Dashboard" ? dell[950] : dell[50],
-                  }}
+                  sx={{ color: pathname === "/" ? dell[950] : dell[50] }}
                 />
               </ListItemIcon>
-              <ListItemText primary={"Panel de control"} />
+              <ListItemText primary={"Turnos"} />
             </ListItemButton>
-          </ListItem>
-        </List>
-        <Divider />
-        <LogoutButton
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "fit-content",
-            bottom: "30px",
-            position: "absolute",
-          }}
-          onClick={onLogout}>
-          <LogoutIcon /> Salir
-        </LogoutButton>
-      </Drawer>
+          </Link>
+        </ListItem>
 
-      <Box
-        component="main"
+        <ListItem
+          key={"Dashboard"}
+          disablePadding
+          sx={{
+            bgcolor: pathname === "/Dashboard" ? dell[500] : null,
+            width: "100%",
+          }}
+        >
+          <ListItemButton
+            sx={{
+              padding: "6px 12px",
+              color: pathname === "/Dashboard" ? dell[950] : dell[50],
+              width: "100%",
+            }}
+            component={Link}
+            to="/Dashboard"
+          >
+            <ListItemIcon sx={{ minWidth: "36px" }}>
+              <DashboardIcon
+                color="primary"
+                sx={{
+                  color: pathname === "/Dashboard" ? dell[950] : dell[50],
+                }}
+              />
+            </ListItemIcon>
+            <ListItemText primary={"Panel de control"} />
+          </ListItemButton>
+        </ListItem>
+      </List>
+      <Divider />
+      <LogoutButton
         sx={{
-          position: "fixed",
-          flexGrow: 1,
           display: "flex",
-          justifyContent: "center", // Centrar horizontalmente
-          alignItems: "center", // Centrar verticalmente
-          ml: `${drawerWidth}px`,
-          height: `calc(100vh - ${appHeight}px)`, // Altura que ocupa el restante de la pantalla
-          width: `calc(100% - ${drawerWidth}px)`,
-        }}>
-        <Routes>
-          <Route path="/" element={<Appointments />} />
-          <Route
-            path="/Dashboard"
-            element={
-              <Dashboard drawerWidth={drawerWidth} appHeight={appHeight} />
-            }
-          />
-        </Routes>
-      </Box>
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "fit-content",
+          bottom: "30px",
+          position: "absolute",
+        }}
+        onClick={onLogout}
+      >
+        <LogoutIcon /> Salir
+      </LogoutButton>
+    </Drawer>
+
+    <Box
+      component="main"
+      sx={{
+        position: "fixed",
+        flexGrow: 1,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        ml: `${drawerWidth}px`,
+        height: `calc(100vh - ${appHeight}px)`,
+        width: `calc(100% - ${drawerWidth}px)`,
+      }}
+    >
+      <Routes>
+        <Route path="/" element={<Turnero />} />
+        <Route
+          path="/Dashboard"
+          element={
+            <Dashboard drawerWidth={drawerWidth} appHeight={appHeight} />
+          }
+        />
+      </Routes>
     </Box>
-  );
+  </Box>
+);
+
 }
 
 const dell = {

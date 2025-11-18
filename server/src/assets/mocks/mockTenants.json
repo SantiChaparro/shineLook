@@ -1,0 +1,104 @@
+{
+  "tenants": [
+    {
+      "id": 1,
+      "dni": 44519800,
+      "nombre": "Juan Pérez",
+      "telefono": "3511234567",
+      "mail": "juan@example.com",
+      "rol": "Master",
+      "password": "123456",
+      "activo": true
+    },
+    {
+      "id": 2,
+      "dni": 40255891,
+      "nombre": "María López",
+      "telefono": "3516789123",
+      "mail": "maria.lopez@example.com",
+      "rol": "Master",
+      "password": "pass123",
+      "activo": true
+    },
+    {
+      "id": 3,
+      "dni": 38911234,
+      "nombre": "Carlos Gómez",
+      "telefono": "3517896541",
+      "mail": "carlos.gomez@example.com",
+      "rol": "Master",
+      "password": "abc123",
+      "activo": true
+    },
+    {
+      "id": 4,
+      "dni": 37455988,
+      "nombre": "Ana Torres",
+      "telefono": "3519988776",
+      "mail": "ana.torres@example.com",
+      "rol": "Master",
+      "password": "qwerty",
+      "activo": false
+    },
+    {
+      "id": 5,
+      "dni": 36544123,
+      "nombre": "Luciano Romero",
+      "telefono": "3513344556",
+      "mail": "luciano.romero@example.com",
+      "rol": "Master",
+      "password": "luc123",
+      "activo": true
+    },
+    {
+      "id": 6,
+      "dni": 42123344,
+      "nombre": "Paula Herrera",
+      "telefono": "3516600441",
+      "mail": "paula.herrera@example.com",
+      "rol": "Master",
+      "password": "paula2024",
+      "activo": true
+    },
+    {
+      "id": 7,
+      "dni": 40981234,
+      "nombre": "Sergio Medina",
+      "telefono": "3515566771",
+      "mail": "sergio.medina@example.com",
+      "rol": "Master",
+      "password": "sergmed",
+      "activo": false
+    },
+    {
+      "id": 8,
+      "dni": 39123455,
+      "nombre": "Florencia Díaz",
+      "telefono": "3511029384",
+      "mail": "flor.diaz@example.com",
+      "rol": "Master",
+      "password": "flor1234",
+      "activo": true
+    },
+    {
+      "id": 9,
+      "dni": 37788900,
+      "nombre": "Martín Silva",
+      "telefono": "3517788991",
+      "mail": "martin.silva@example.com",
+      "rol": "Master",
+      "password": "martinpass",
+      "activo": true
+    },
+    {
+      "id": 10,
+      "dni": 41345900,
+      "nombre": "Valeria Castro",
+      "telefono": "3514455663",
+      "mail": "valeria.castro@example.com",
+      "rol": "Master",
+      "password": "val2024",
+      "activo": false
+    }
+  ]
+}

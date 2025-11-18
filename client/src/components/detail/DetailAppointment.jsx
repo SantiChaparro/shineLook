@@ -3,11 +3,11 @@ import Divider from "@mui/material/Divider";
 import MenuItem from "@mui/material/MenuItem";
 import { createTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
-import { css, display, styled, ThemeProvider, width } from "@mui/system";
+import { css, styled, ThemeProvider } from "@mui/system";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { urlApi } from "../../assets/urlApi";
 import GroupTable from "./GroupTable";
 import Checkbox from "@mui/material/Checkbox";
@@ -24,11 +24,14 @@ const DetailAppointment = ({
 }) => {
   const date = dayjs(event[0].start).format("DD/MM/YYYY");
 
+  const { tenantId } = useSelector((state) => state.tenant);
+
   const [totalService, setTotalService] = useState(0);
   const [remaining, setRemaining] = useState(0);
   const [paid, setPaid] = useState({
     payment_day: dayjs().format("YYYY-MM-DD"),
     amount: "",
+    depositAmount: 0,
     payment_mode: "",
     appointmentsId: [],
     completePayment: true,
@@ -36,163 +39,119 @@ const DetailAppointment = ({
   const [paid2, setPaid2] = useState({
     payment_day: dayjs().format("YYYY-MM-DD"),
     amount: "",
+    depositAmount: 0,
     payment_mode: "",
     appointmentsId: [],
     completePayment: true,
   });
-  const {tenantId} = useSelector((state) => state.tenant);
-  console.log('tenantid desde detail appointment', tenantId);
-  
-
-  const dispatch = useDispatch();
-
-  const eventRender = event.sort((a, b) => a.start - b.start);
 
   const [twoPaid, setTwoPaid] = useState(false);
-
   const [attended, setAttended] = useState(null);
   const [appointmentsToPay, setAppointmentsToPay] = useState([]);
+  console.log('citas a pagar',appointmentsToPay);
+  
+  const eventRender = event.sort((a, b) => a.start - b.start);
 
-  const handleTwoPaid = () => {
-    setTwoPaid(!twoPaid); //esto lo usamos para marcar si el cliente es privado o no
-  };
+  const handleTwoPaid = () => setTwoPaid(!twoPaid);
 
-  const handleChangeDeposit = async (e) => {
-    const seña = e.target.value;
+  const handleChangeDeposit = (e) =>
+    setPaid((prev) => ({ ...prev, depositAmount: Number(e.target.value) }));
 
-    setPaid({ ...paid, depositAmount: seña });
-    // setNewAppointment({ ...newAppointment, dni: dni });
-    // validateInput("dni", { ...newAppointment, dni: dni });
-  };
+  const handleChangeDeposit2 = (e) =>
+    setPaid2((prev) => ({ ...prev, depositAmount: Number(e.target.value) }));
 
-  const handleChangeDeposit2 = async (e) => {
-    const seña = e.target.value;
+  const handlePaidMethod = (e) =>
+    setPaid((prev) => ({ ...prev, payment_mode: e.target.value }));
 
-    setPaid2({ ...paid2, depositAmount: seña });
-    // setNewAppointment({ ...newAppointment, dni: dni });
-    // validateInput("dni", { ...newAppointment, dni: dni });
-  };
+  const handlePaidMethod2 = (e) =>
+    setPaid2((prev) => ({ ...prev, payment_mode: e.target.value }));
 
   useEffect(() => {
-    if (event) {
-      calcCost(event);
-    }
-  }, [event]);
+    if (event) calcCost(event);
+  }, [event, appointmentsToPay]);
 
   useEffect(() => {
     if (eventRender && totalService) {
-      const appointmentsNoPaid = event.filter(
-        (event) => event.status === false
-      );
-      const ids = appointmentsNoPaid.flatMap((app) => app.idAppointment);
-
-      setPaid({ ...paid, appointmentsId: ids });
-      setPaid2({ ...paid2, appointmentsId: ids });
+      const appointmentsNoPaid = event.filter((ev) => ev.status === false);
+      const ids = appointmentsNoPaid.map((app) => app.idAppointment);
+      setPaid((prev) => ({ ...prev, appointmentsId: ids }));
+      setPaid2((prev) => ({ ...prev, appointmentsId: ids }));
     }
   }, [eventRender, totalService]);
-
-  useEffect(() => {
-    if (event) {
-      const allPaid = event.every((element) => element.status === true);
-
-      if (allPaid) {
-        // Si todas las citas están pagadas, calcular el monto total
-        const totalAmount = event.reduce(
-          (total, element) => total + element.cost,
-          0
-        );
-        setTotalService(totalAmount);
-        setRemaining(0); // Ya no hay saldo a pagar
-      } else {
-        // Si no todas las citas están pagadas, recalcular el monto total y el saldo restante
-        calcCost(event);
-      }
-    }
-  }, [event, appointmentsToPay]);
 
   const calcCost = (event) => {
     let totalAmount = 0;
     let remainingAmount = 0;
 
-    // Filtrar las citas que están en appointmentsToPay
-    const filteredEvents = event.filter((element) =>
-      appointmentsToPay.includes(element.idAppointment)
-    );
+    const filteredEvents =
+      appointmentsToPay.length > 0
+        ? event.filter((ev) => appointmentsToPay.includes(ev.idAppointment))
+        : event;
 
     filteredEvents.forEach((element) => {
       totalAmount += Number(element.cost);
 
       let totalDeposit = 0;
-
       element.payments.forEach((pay) => {
-        totalDeposit += pay.depositAmount;
+        totalDeposit += Number(pay.depositAmount || 0);
       });
 
       if (element.status === false) {
-        remainingAmount += Number(element.cost - (totalDeposit || 0));
+        remainingAmount += Number(element.cost - totalDeposit);
       }
     });
 
     setTotalService(totalAmount);
     setRemaining(remainingAmount);
-    setPaid({ ...paid, amount: totalAmount });
-    setPaid2({ ...paid2, amount: totalAmount });
-  };
-
-  const handlePaidMethod = async (e) => {
-    const modePaid = e.target.value;
-
-    setPaid({ ...paid, payment_mode: modePaid });
-  };
-
-  const handlePaidMethod2 = async (e) => {
-    const modePaid = e.target.value;
-
-    setPaid2({ ...paid2, payment_mode: modePaid });
+    setPaid((prev) => ({ ...prev, amount: totalAmount }));
+    setPaid2((prev) => ({ ...prev, amount: totalAmount }));
   };
 
   const handlePay = async (e) => {
     e.preventDefault();
 
-    const updatedPaid = { ...paid, appointmentsId: appointmentsToPay, tenantId: tenantId };
-    const updatedPaid2 = { ...paid2, appointmentsId: appointmentsToPay, tenantId: tenantId };
-console.log("Datos enviados:", updatedPaid);
+    const idsToPay =
+      appointmentsToPay.length > 0
+        ? appointmentsToPay
+        : event.map((ev) => ev.idAppointment);
+
+    const updatedPaid = { ...paid, appointmentsId: idsToPay, tenantId };
+    const updatedPaid2 = { ...paid2, appointmentsId: idsToPay, tenantId };
 
     try {
       if (twoPaid) {
-      }
-      console.log("Datos enviados:", updatedPaid);
-      const response = await axios.post(`${urlApi}payment`, updatedPaid);
-      if (twoPaid) {
-        console.log("Datos enviados:", updatedPaid);
-        const response = await axios.post(`${urlApi}payment`, updatedPaid2);
+        await axios.post(`${urlApi}payment`, updatedPaid);
+        await axios.post(`${urlApi}payment`, updatedPaid2);
+      } else {
+        await axios.post(`${urlApi}payment`, updatedPaid);
       }
 
       await paymentSuccess(eventSearch);
       closeModal();
     } catch (error) {
-      throw alert("Error al procesar el pago:", error.message);
+      alert("Error al procesar el pago: " + error.message);
     }
   };
 
-  const handleAttended = async (e) => {
-    try {
-      const response = await axios.post(`${urlApi}payment`, {attended:attended, tenantId: tenantId});
+  const handleAttendedChange = (idAppointment, value) =>
+    setAttended({ appointmentsId: [idAppointment], attended: value });
 
-      // await paymentSuccess(eventSearch);
+  const handleAttended = async () => {
+    try {
+      await axios.post(`${urlApi}payment`, {
+        attended,
+        tenantId,
+      });
       closeModal();
     } catch (error) {
-      throw alert("Error al procesar el pago:", error.message);
+      alert("Error al procesar el pago: " + error.message);
     }
-  };
-
-  const handleAttendedChange = (idAppointment, value) => {
-    setAttended({ appointmentsId: [idAppointment], attended: value });
   };
 
   useEffect(() => {
     if (attended?.attended) handleAttended();
   }, [attended]);
+
   return (
     <Modal
       aria-labelledby="keep-mounted-modal-title"
@@ -200,7 +159,8 @@ console.log("Datos enviados:", updatedPaid);
       open={openModal}
       onClose={closeModal}
       slots={{ backdrop: StyledBackdrop }}
-      keepMounted>
+      keepMounted
+    >
       <ModalContent sx={{ width: "fit-content", height: 500 }}>
         <div style={{ height: "10%" }} className="header">
           <div
@@ -209,7 +169,8 @@ console.log("Datos enviados:", updatedPaid);
               padding: "12px",
               color: `${colors.dell[950]}`,
               fontSize: "1rem",
-            }}>
+            }}
+          >
             {event && event[0] && event[0].nameClient}
           </div>
           <div
@@ -219,7 +180,8 @@ console.log("Datos enviados:", updatedPaid);
               padding: "8px",
               margin: "8px auto",
               boxSizing: "border-box",
-            }}>
+            }}
+          >
             <article
               style={{
                 fontSize: "0.65rem",
@@ -227,7 +189,8 @@ console.log("Datos enviados:", updatedPaid);
                 lineHeight: "1.4",
                 margin: "0",
                 color: `${colors.dell[950]}`,
-              }}>
+              }}
+            >
               <strong>Nota: </strong>En caso de no asistir al turno, modificar
               el costo del servicio al valor de la seña y confirmar la asistencia del turno
               para calcular comisión.
@@ -240,10 +203,12 @@ console.log("Datos enviados:", updatedPaid);
               padding: "12px",
               color: `${colors.dell[950]}`,
               fontSize: "1rem",
-            }}>
+            }}
+          >
             {date}
           </div>
         </div>
+
         <Divider />
 
         <GroupTable
@@ -258,142 +223,107 @@ console.log("Datos enviados:", updatedPaid);
         />
 
         <Divider />
+
         <div className="footer">
           {remaining !== 0 && (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyItems: "center",
-                alignItems: "center",
-              }}>
-              <label
-                style={{
-                  fontSize: "10px",
-                  marginBottom: "2px",
-                  fontWeight: "bold",
-                  color: `${colors.dell[950]}`,
-                }}>
-                Monto total
-              </label>
-              <p
-                style={{
-                  fontSize: "22px",
-                  fontWeight: "bold",
-                  margin: 0,
-                  color: `${colors.dell[800]}`,
-                }}>
-                $ {totalService}
-              </p>
-            </div>
-          )}
-          {remaining !== 0 && (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyItems: "center",
-                alignItems: "center",
-              }}>
-              <label
-                style={{
-                  fontSize: "10px",
-                  marginBottom: "2px",
-                  fontWeight: "bold",
-                  color: `${colors.dell[950]}`,
-                }}>
-                Saldo a pagar
-              </label>
-              <p
-                style={{
-                  fontSize: "22px",
-                  fontWeight: "bold",
-                  margin: 0,
-                  color: `${red[800]}`,
-                }}>
-                $ {remaining}
-              </p>
-            </div>
-          )}
-          {remaining !== 0 && (
-            <ThemeProvider theme={theme}>
-              <CustomCheckboxLabel
-                control={
-                  <Checkbox
-                    size="small"
-                    checked={twoPaid}
-                    onChange={handleTwoPaid}
-                    style={{ padding: "0", marginRight: "2px" }}
-                  />
-                }
-                label="Dividir pago"
-                sx={{
-                  "& .MuiFormControlLabel-label": {
-                    fontWeight: "bold", // Establece el peso de la fuente
-                    fontSize: "12px",
-                  },
-                }}
-              />
-            </ThemeProvider>
-          )}
-          {remaining !== 0 && (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: " row",
-                gap: "20px",
-                width: "40%",
-                alignItems: "center",
-              }}>
+            <>
               <div
                 style={{
                   display: "flex",
-                  flexDirection: " column",
-                  gap: "10px",
-                  width: "100%",
-                }}>
+                  flexDirection: "column",
+                  justifyItems: "center",
+                  alignItems: "center",
+                }}
+              >
+                <label
+                  style={{
+                    fontSize: "10px",
+                    marginBottom: "2px",
+                    fontWeight: "bold",
+                    color: `${colors.dell[950]}`,
+                  }}
+                >
+                  Monto total
+                </label>
+                <p
+                  style={{
+                    fontSize: "22px",
+                    fontWeight: "bold",
+                    margin: 0,
+                    color: `${colors.dell[800]}`,
+                  }}
+                >
+                  $ {totalService}
+                </p>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyItems: "center",
+                  alignItems: "center",
+                }}
+              >
+                <label
+                  style={{
+                    fontSize: "10px",
+                    marginBottom: "2px",
+                    fontWeight: "bold",
+                    color: `${colors.dell[950]}`,
+                  }}
+                >
+                  Saldo a pagar
+                </label>
+                <p
+                  style={{
+                    fontSize: "22px",
+                    fontWeight: "bold",
+                    margin: 0,
+                    color: `${red[800]}`,
+                  }}
+                >
+                  $ {remaining}
+                </p>
+              </div>
+
+              <ThemeProvider theme={theme}>
+                <CustomCheckboxLabel
+                  control={
+                    <Checkbox
+                      size="small"
+                      checked={twoPaid}
+                      onChange={handleTwoPaid}
+                      style={{ padding: "0", marginRight: "2px" }}
+                    />
+                  }
+                  label="Dividir pago"
+                  sx={{
+                    "& .MuiFormControlLabel-label": {
+                      fontWeight: "bold",
+                      fontSize: "12px",
+                    },
+                  }}
+                />
+              </ThemeProvider>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: " row",
+                  gap: "20px",
+                  width: "40%",
+                  alignItems: "center",
+                }}
+              >
                 <div
                   style={{
                     display: "flex",
-                    flexDirection: " row",
+                    flexDirection: " column",
                     gap: "10px",
                     width: "100%",
-                    alignItems: "center",
-                  }}>
-                  <ThemeProvider theme={theme}>
-                    <TextField
-                      id="outlined-select-currency"
-                      select
-                      label="Método de pago"
-                      defaultValue=""
-                      style={{ width: "70%" }}
-                      onChange={handlePaidMethod}
-                      size="small">
-                      <MenuItem value="Efectivo">Efectivo</MenuItem>
-                      <MenuItem value="Transferencia">Transferencia</MenuItem>
-                      <MenuItem value="Débito">Débito</MenuItem>
-                      <MenuItem value="Crédito">Crédito</MenuItem>
-                    </TextField>
-                  </ThemeProvider>
-                  <ThemeProvider theme={theme}>
-                    <TextField
-                      id="seña"
-                      label={`$ ${twoPaid ? remaining / 2 : remaining}`}
-                      type="number" // Cambia a tipo número
-                      variant="outlined"
-                      size="small"
-                      value={paid.depositAmount}
-                      onChange={handleChangeDeposit}
-                      style={{ width: "40%" }} // Ajusta el ancho según sea necesario
-                      inputProps={{
-                        max: twoPaid ? remaining / 2 : remaining, // Establece el valor máximo
-                        min: 0, // Opcional: establece un valor mínimo si es necesario
-                        step: "any", // Opcional: permite pasos fraccionarios
-                      }}
-                    />
-                  </ThemeProvider>
-                </div>
-                {twoPaid ? (
+                  }}
+                >
                   <div
                     style={{
                       display: "flex",
@@ -401,7 +331,8 @@ console.log("Datos enviados:", updatedPaid);
                       gap: "10px",
                       width: "100%",
                       alignItems: "center",
-                    }}>
+                    }}
+                  >
                     <ThemeProvider theme={theme}>
                       <TextField
                         id="outlined-select-currency"
@@ -409,47 +340,97 @@ console.log("Datos enviados:", updatedPaid);
                         label="Método de pago"
                         defaultValue=""
                         style={{ width: "70%" }}
-                        onChange={handlePaidMethod2}
-                        size="small">
+                        onChange={handlePaidMethod}
+                        size="small"
+                      >
                         <MenuItem value="Efectivo">Efectivo</MenuItem>
                         <MenuItem value="Transferencia">Transferencia</MenuItem>
                         <MenuItem value="Débito">Débito</MenuItem>
                         <MenuItem value="Crédito">Crédito</MenuItem>
                       </TextField>
                     </ThemeProvider>
+
                     <ThemeProvider theme={theme}>
                       <TextField
                         id="seña"
-                        label={
-                          paid.depositAmount > 0
-                            ? `$ ${remaining - paid.depositAmount}`
-                            : `$ ${remaining / 2}`
-                        }
+                        label={`$ ${twoPaid ? remaining / 2 : remaining}`}
                         type="number"
                         variant="outlined"
                         size="small"
-                        value={paid2.depositAmount}
-                        onChange={handleChangeDeposit2}
-                        style={{ width: "40%" }} // Ajusta el ancho según sea necesario
+                        value={paid.depositAmount}
+                        onChange={handleChangeDeposit}
+                        style={{ width: "40%" }}
                         inputProps={{
-                          max: remaining / 2,
-                          min: 0, // Opcional: establece un valor mínimo si es necesario
-                          step: "any", // Opcional: permite pasos fraccionarios
+                          max: twoPaid ? remaining / 2 : remaining,
+                          min: 0,
+                          step: "any",
                         }}
                       />
                     </ThemeProvider>
                   </div>
-                ) : null}
+
+                  {twoPaid && (
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: " row",
+                        gap: "10px",
+                        width: "100%",
+                        alignItems: "center",
+                      }}
+                    >
+                      <ThemeProvider theme={theme}>
+                        <TextField
+                          id="outlined-select-currency"
+                          select
+                          label="Método de pago"
+                          defaultValue=""
+                          style={{ width: "70%" }}
+                          onChange={handlePaidMethod2}
+                          size="small"
+                        >
+                          <MenuItem value="Efectivo">Efectivo</MenuItem>
+                          <MenuItem value="Transferencia">Transferencia</MenuItem>
+                          <MenuItem value="Débito">Débito</MenuItem>
+                          <MenuItem value="Crédito">Crédito</MenuItem>
+                        </TextField>
+                      </ThemeProvider>
+
+                      <ThemeProvider theme={theme}>
+                        <TextField
+                          id="seña"
+                          label={
+                            paid.depositAmount > 0
+                              ? `$ ${remaining - paid.depositAmount}`
+                              : `$ ${remaining / 2}`
+                          }
+                          type="number"
+                          variant="outlined"
+                          size="small"
+                          value={paid2.depositAmount}
+                          onChange={handleChangeDeposit2}
+                          style={{ width: "40%" }}
+                          inputProps={{
+                            max: remaining / 2,
+                            min: 0,
+                            step: "any",
+                          }}
+                        />
+                      </ThemeProvider>
+                    </div>
+                  )}
+                </div>
+
+                <TriggerButton
+                  color="success"
+                  size="small"
+                  onClick={handlePay}
+                  disabled={paid.payment_mode === ""}
+                >
+                  Pagar
+                </TriggerButton>
               </div>
-              <TriggerButton
-                // variant="contained"
-                color="success"
-                size="small"
-                onClick={handlePay}
-                disabled={paid.payment_mode === ""}>
-                Pagar
-              </TriggerButton>
-            </div>
+            </>
           )}
         </div>
       </ModalContent>
@@ -457,6 +438,7 @@ console.log("Datos enviados:", updatedPaid);
   );
 };
 
+// ------------------- Estilos -------------------
 const Modal = styled(BaseModal)(
   ({ theme }) => css`
     position: fixed;
@@ -506,13 +488,11 @@ const ModalContent = styled("div")(
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 20%; /* 20% de la altura del modal */
+      height: 20%;
     }
 
     .content {
-      // flex-grow: 1; /* Para expandir este contenedor y que ocupe todo el espacio disponible */
-      // overflow-y: auto; /* Para agregar barras de desplazamiento vertical si el contenido excede el tamaño del contenedor */
-      height: 60%; /* 60% de la altura del modal */
+      height: 60%;
     }
 
     .footer {
@@ -521,7 +501,7 @@ const ModalContent = styled("div")(
       justify-content: space-around;
       align-items: center;
       margin-top: 5px;
-      height: 20%; /* 20% de la altura del modal */
+      height: 20%;
     }
 
     .modal-title {
@@ -546,20 +526,6 @@ const colors = {
     900: "#284e19",
     950: "#112b08",
   },
-  codGray: {
-    50: "#f7f7f6",
-    100: "#e5e4e2",
-    200: "#cac9c5",
-    300: "#a8a7a0",
-    400: "#85847c",
-    500: "#6b6a61",
-    600: "#54544d",
-    700: "#454540",
-    800: "#3a3935",
-    900: "#32322f",
-    930: "#161F1D",
-    950: "#0b0b0a",
-  },
 };
 
 const green = {
@@ -575,7 +541,18 @@ const green = {
   900: "#145E14",
 };
 
-export default DetailAppointment;
+const red = {
+  50: "#FFEBEE",
+  100: "#FFCDD2",
+  200: "#EF9A9A",
+  300: "#E57373",
+  400: "#EF5350",
+  500: "#F44336",
+  600: "#E53935",
+  700: "#D32F2F",
+  800: "#C62828",
+  900: "#B71C1C",
+};
 
 const TriggerButton = styled("button")(
   ({ theme }) => css`
@@ -611,11 +588,9 @@ const TriggerButton = styled("button")(
     }
 
     &:disabled {
-      // opacity: 0.5;
       background: #ccc;
       color: #666;
       cursor: not-allowed;
-      // pointer-events: none; /* Desactivar eventos de puntero */
     }
   `
 );
@@ -624,17 +599,15 @@ const CustomCheckboxLabel = styled(FormControlLabel)(
   ({ theme }) => css`
     font-family: "Roboto", sans-serif;
     font-size: 8px;
-    color: ${theme.palette.mode === "dark"
-      ? "#fff"
-      : "#333"}; /* Example color based on theme mode */
-    margin-left: 8px; /* Adjust margin as needed */
+    color: ${theme.palette.mode === "dark" ? "#fff" : "#333"};
+    margin-left: 8px;
   `
 );
 
 const theme = createTheme({
   palette: {
     success: {
-      main: colors.dell[600], // Cambia el color principal de éxito (success)
+      main: colors.dell[600],
     },
     primary: {
       main: colors.dell[600],
@@ -642,15 +615,4 @@ const theme = createTheme({
   },
 });
 
-const red = {
-  50: "#FFEBEE",
-  100: "#FFCDD2",
-  200: "#EF9A9A",
-  300: "#E57373",
-  400: "#EF5350",
-  500: "#F44336",
-  600: "#E53935",
-  700: "#D32F2F",
-  800: "#C62828",
-  900: "#B71C1C",
-};
+export default DetailAppointment;

@@ -1,14 +1,15 @@
 const {Tenants,Professional} = require('../db.js');
 
 
-const createTenant = async (dni,nombre,telefono,mail,rol,password) => {
+const createTenant = async (dni,nombre,telefono,mail,rol,password,activo) => {
     const newTenant = await Tenants.create({
         dni,
         nombre,
         telefono,
         mail,
         rol,
-        password
+        password,
+        activo
     });
 
     if(newTenant){

@@ -6,6 +6,7 @@ const professionalLoader = require('./src/assets/funtions/loadProfessional');
 const serviceLoader = require('./src/assets/funtions/loadservice');
 const loadProfessionalService = require('./src/assets/funtions/loadProfessionalService');
 const commissionsLoader = require('./src/assets/funtions/loadCommissions');
+const loadTenants = require('./src/assets/funtions/loadTenants');
 const PORT = process.env.PORT
 
 
@@ -18,6 +19,7 @@ conn.sync({ force: true }).then(() => {
         await clientLoader();
         await professionalLoader();
         await serviceLoader();
+        await loadTenants();
         // await commissionsLoader();
 
         console.log(`Listening to port ${PORT}`);

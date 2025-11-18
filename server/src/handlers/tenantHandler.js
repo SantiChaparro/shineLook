@@ -4,11 +4,11 @@ const {createTenant} = require('../controllers/tenantControllers.js');
 
 const postTenant = async (req,res) => {
 
-    const {dni,nombre,telefono,mail,rol,password} = req.body;
+    const {dni,nombre,telefono,mail,rol,password,activo} = req.body;
     console.log(req.body);
 
     try {
-        const newTenant = await createTenant(dni,nombre,telefono,mail,rol,password);
+        const newTenant = await createTenant(dni,nombre,telefono,mail,rol,password,activo);
 
         if(newTenant){
             res.status(200).json({message:'Tenant creado com éxito!', newTenant});
