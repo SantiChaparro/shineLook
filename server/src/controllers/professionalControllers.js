@@ -33,7 +33,7 @@ const getAllProfessionals = async (tenantId) => {
         include: [
             {
                 model: Professional,
-                attributes: ['dni', 'name', 'phone', 'mail', 'role', 'services'],
+                attributes: ['dni', 'name', 'phone', 'mail', 'role', 'services','profileImage','profileImageId'],
                 //through: { attributes: [] }
             }
         ],
@@ -42,7 +42,7 @@ const getAllProfessionals = async (tenantId) => {
 }
 
 
-const postNewProfessional = async (dni,name,phone,mail,role,password,services,tenantId) => {
+const postNewProfessional = async (dni,name,phone,mail,role,password,services,tenantId,profileImage,profileImageId) => {
 
     const existingProfessional = await Professional.findByPk(dni);
    
@@ -74,7 +74,7 @@ const postNewProfessional = async (dni,name,phone,mail,role,password,services,te
         const hashedPassword = await hashPassword(password);
      
 
-        const newProfessional = await Professional.create({dni,name,phone,mail,role,password: hashedPassword,services});
+        const newProfessional = await Professional.create({dni,name,phone,mail,role,password: hashedPassword,services,profileImage,profileImageId});
 
         // Crear la relación con el tenant
         await TenantProfessional.create({

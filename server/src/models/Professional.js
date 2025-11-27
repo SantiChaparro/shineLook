@@ -39,6 +39,14 @@ module.exports = (sequelize) => {
         services: {
             type: DataTypes.ARRAY(DataTypes.JSON),
             allowNull: true,
-        }
+        },
+        profileImage: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        profileImageId: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
     })
 };

@@ -173,13 +173,15 @@ export const updateProfessional = (updateData,dni) => {
 
 };
 
-export const postNewProfessional = (dni,name,phone,mail,role,password,services,tenantId) => {
+export const postNewProfessional = (dni,name,phone,mail,role,password,services,tenantId,profileImage,profileImageId) => {
   
     return async(dispatch) => {
 
         try {
 
-            const resp = await axios.post(`${urlApi}professional`,{dni,name,phone,mail,role,password,services,tenantId});
+            const resp = await axios.post(`${urlApi}professional`,{dni,name,phone,mail,role,password,services,tenantId,profileImage,profileImageId});
+            console.log('respuesta thunck postprofessional',resp);
+            
             dispatch(createNewProfessional({newProfessional: resp.data}));
            
         } catch (error) {

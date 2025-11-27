@@ -16,6 +16,8 @@ import {
   getServices,
   postNewProfessional,
 } from "../../redux/slices/appointments/thunks";
+import UpLoadImage from "../../components/UpLoadImage";
+import { uploadImage } from "../../utils/cloudinary.config.js";
 
 const initialValues = {
   name: "",
@@ -91,8 +93,11 @@ const NewProfessionalForm = () => {
   const [openSnackbar, setOpenSnackBar] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [severity, setSeverity] = useState("success");
+  const [file, setFile] = useState(null);
+
   const dispatch = useDispatch();
   
+console.log('fotodeper4fil',file);
 
   useEffect(() => {
     dispatch(getServices(tenantId));
@@ -155,14 +160,50 @@ const NewProfessionalForm = () => {
       });
     }
   };
+// descomentar si no funciona la subida de imagen
+  // const handleSubmit = (values, { resetForm }) => {
+  //   const { name, dni, phone, mail, role, password, services } = values;
+  //   dispatch(
+  //     postNewProfessional(dni, name, phone, mail, role, password, services,tenantId)
+  //   );
+  //   resetForm();
+  // };
 
-  const handleSubmit = (values, { resetForm }) => {
-    const { name, dni, phone, mail, role, password, services } = values;
-    dispatch(
-      postNewProfessional(dni, name, phone, mail, role, password, services,tenantId)
-    );
-    resetForm();
-  };
+  // submit con imagen
+  const handleSubmit = async (values, { resetForm }) => {
+  let imageUrl = null;
+
+  if (file) {
+    try {
+      imageUrl = await uploadImage(file,'professionals'); // tu función externa para Cloudinary
+    } catch (error) {
+      console.error("Error subiendo la imagen:", error);
+      // opcional: mostrar alerta al usuario o continuar sin la imagen
+    }
+  }
+
+  const profileImage = imageUrl ? imageUrl.secure_url : null;
+  const profileImageId = imageUrl ? imageUrl.public_id : null;
+
+ 
+  dispatch(
+    postNewProfessional(
+      values.dni,
+      values.name,
+      values.phone,
+      values.mail,
+      values.role,
+      values.password,
+      values.services,
+      tenantId,
+      profileImage,
+      profileImageId
+    )
+  );
+
+  resetForm();
+};
+
 
   const formik = useFormik({
     initialValues,
@@ -336,7 +377,7 @@ const NewProfessionalForm = () => {
                     ))}
                   </TextField>
                 </FormControl>
-
+                 
                 <Box
                   label="Servicios elegidos"
                   sx={{
@@ -402,8 +443,11 @@ const NewProfessionalForm = () => {
                     </StyledInputLabel>
                   )}
                 </Box>
+              <UpLoadImage setFile={setFile} />
+
               </div>
             </div>
+            
           </FormControl>
           <div
             style={{
@@ -434,6 +478,8 @@ const NewProfessionalForm = () => {
 };
 
 export default NewProfessionalForm;
+
+
 
 const blue = {
   100: "#CCE6FF",

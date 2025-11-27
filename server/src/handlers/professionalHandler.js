@@ -21,7 +21,9 @@ const getProfecionals = async (req,res) => {
 
 const postProfecionals = async (req,res) => {
 
-    const {dni,name,phone,mail,role,password,services,tenantId} = req.body;
+    const {dni,name,phone,mail,role,password,services,tenantId,profileImage,profileImageId} = req.body;
+    console.log('imgUrl',profileImage);
+     console.log('imgId',profileImageId);
     
   
 
@@ -29,7 +31,7 @@ const postProfecionals = async (req,res) => {
 
     try {
         
-        const professional = await postNewProfessional(dni,name,phone,mail,role,password,services,tenantId);
+        const professional = await postNewProfessional(dni,name,phone,mail,role,password,services,tenantId,profileImage,profileImageId);
 
         if(professional){
             res.status(200).json(professional);
