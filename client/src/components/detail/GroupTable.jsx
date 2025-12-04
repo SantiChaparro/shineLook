@@ -34,6 +34,8 @@ const GroupTable = ({
   setAppointmentsToPay,
   handleAttendedChange,
 }) => {
+  console.log('list de eventos',event);
+  
   const dispatch = useDispatch();
   const { professionals } = useSelector((state) => state.professionals);
 
@@ -53,6 +55,7 @@ const GroupTable = ({
   const [listProfessional, setListProfessional] = useState("");
   const [eventTable, setEventTable] = useState([]);
   const [selectedAppointments, setSelectedAppointments] = useState([]);
+console.log('citas seleccionadas', selectedAppointments);
 
   useEffect(() => {
     setEventTable(event);
@@ -63,6 +66,8 @@ const GroupTable = ({
   }, [selectedAppointments, setAppointmentsToPay]);
 
   const handleSelectAppointment = (idAppointment) => {
+    console.log('id de cita seleccionada',idAppointment);
+    
     setSelectedAppointments((prev) => {
       if (prev.includes(idAppointment)) {
         return prev.filter((id) => id !== idAppointment);

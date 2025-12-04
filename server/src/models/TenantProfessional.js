@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "Professional", // Nombre del modelo Professional
+        model: "Professional",
         key: "dni",
       },
       onUpdate: "CASCADE",
@@ -29,7 +29,22 @@ module.exports = (sequelize) => {
     },
     active: {
       type: DataTypes.BOOLEAN,
-      defaultValue: true, // Por defecto, el profesional está activo
+      defaultValue: true, 
     },
+    totalRating: {
+      type: DataTypes.INTEGER,
+      allowNull: true,        
+      defaultValue: null,
+    },
+    ratingCount: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+    },
+    ratingAverage:{
+      type: DataTypes.FLOAT,
+      allowNull: true,
+      defaultValue: null,
+    }
   });
 };

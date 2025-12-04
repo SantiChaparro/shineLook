@@ -49,6 +49,8 @@ const DetailAppointment = ({
   const [attended, setAttended] = useState(null);
   const [appointmentsToPay, setAppointmentsToPay] = useState([]);
   console.log('citas a pagar',appointmentsToPay);
+  console.log('citas atendidas',attended);
+  
   
   const eventRender = event.sort((a, b) => a.start - b.start);
 
@@ -134,6 +136,8 @@ const DetailAppointment = ({
   };
 
   const handleAttendedChange = (idAppointment, value) =>
+   // console.log('ejecutando handleattended');
+    
     setAttended({ appointmentsId: [idAppointment], attended: value });
 
   const handleAttended = async () => {
@@ -142,6 +146,7 @@ const DetailAppointment = ({
         attended,
         tenantId,
       });
+       await reloadTable();
       closeModal();
     } catch (error) {
       alert("Error al procesar el pago: " + error.message);

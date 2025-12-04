@@ -10,6 +10,10 @@ client/node_modules/.cache/default-development/5.pack
 /.pnp
 .pnp.js
 
+# WhatsApp Web JS
+server/.wwebjs_auth/
+server/.wwebjs_cache/
+
 # testing
 /coverage
 

@@ -16,6 +16,7 @@ import * as React from "react";
 import logoBlanco from "../../assets/LogoBlanco.PNG";
 import Turnero from "../../views/Turnero/Turnero";
 import Dashboard from "../../views/Dashboard/Dashboard";
+import Whatsapp from "../../views/whatsapp/Whatsapp";
 import {jwtDecode} from 'jwt-decode';
 
 
@@ -158,6 +159,31 @@ export default function SideBar({ onLogout,selectedtenant }) {
             <ListItemText primary={"Panel de control"} />
           </ListItemButton>
         </ListItem>
+        <ListItem
+  key={"Whatsapp"}
+  disablePadding
+  sx={{
+    bgcolor: pathname === "/whatsapp" ? dell[500] : null,
+    width: "100%",
+  }}
+>
+  <ListItemButton
+    sx={{
+      padding: "6px 12px",
+      color: pathname === "/whatsapp" ? dell[950] : dell[50],
+      width: "100%",
+    }}
+    component={Link}
+    to="/whatsapp"
+    onClick={handleOtherItemClick}
+  >
+    <ListItemIcon sx={{ minWidth: "36px" }}>
+      {/* Puedes usar un icono de WhatsApp */}
+      <HomeIcon sx={{ color: pathname === "/whatsapp" ? dell[950] : dell[50] }} />
+    </ListItemIcon>
+    <ListItemText primary={"WhatsApp"} />
+  </ListItemButton>
+</ListItem>
       </List>
       <Divider />
       <LogoutButton
@@ -197,6 +223,8 @@ export default function SideBar({ onLogout,selectedtenant }) {
             <Dashboard drawerWidth={drawerWidth} appHeight={appHeight} />
           }
         />
+        <Route path="/whatsapp" element={<Whatsapp />} />
+
       </Routes>
     </Box>
   </Box>

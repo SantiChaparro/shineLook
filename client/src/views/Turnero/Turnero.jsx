@@ -33,6 +33,8 @@ function Turnero() {
 
 
   console.log('profesionales', professionals);
+  console.log('citas desde turnero',appointments);
+  
   
   // --- Navegación de fechas ---
   const handlePrev = () => setCurrentDate(currentDate.subtract(1, "day"));
@@ -49,6 +51,12 @@ function Turnero() {
     }
   }, [dispatch, tenantId]);
 
+  useEffect(() => {
+  if (tenantId) {
+    dispatch(getAppointments(tenantId));
+  }
+}, [reloadTable]);
+
   // --- Adaptar citas del backend a eventos del calendario ---
   useEffect(() => {
     if (appointments?.length) {
@@ -57,7 +65,7 @@ function Turnero() {
         const lastPayment = appointment.Payments[length - 1] || {};
 
         return {
-          id: appointment.id,
+          idAppointment: appointment.id,
           title: appointment.Client?.name || "Sin nombre",
           serviceName: appointment.Service?.service_name || "",
           serviceId: appointment.ServiceId,
@@ -118,6 +126,10 @@ function Turnero() {
       console.error("Error actualizando citas:", error);
     }
   };
+
+  const handleReloadTable = () => {
+  setReloadTable(!reloadTable);
+}
 
   // --- Colores dinámicos según estado del pago ---
   const eventStyleGetter = (event) => {
@@ -200,7 +212,7 @@ function Turnero() {
           event={eventSelected}
           setEventSelected={setEventSelected}
           paymentSuccess={paymentSuccess}
-          reloadTable={reloadTable}
+          reloadTable={handleReloadTable}
           eventSearch={eventSearch}
         />
       )}
