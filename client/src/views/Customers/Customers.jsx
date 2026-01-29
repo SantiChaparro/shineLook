@@ -11,12 +11,19 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomers, updateCustomer } from "../../redux/slices/appointments/thunks";
+import clientSchema from '../../schemas/clientSchema';
+import NewCustomerForm from '../../views/NewCustomerForm/NewCustomerForm';
+import EditModal from "../../components/EditModal";
+import DashboardBase from "../../components/DashboardBase";
+import LeftPanelItemContent from "../../components/LeftPanelItemContent";
+
 
 import { createTheme } from "@mui/material/styles";
 import { css, styled, ThemeProvider } from "@mui/system";
 
 const Customers = () => {
   const { customers } = useSelector((state) => state.customer);
+  const leftPanel = customers;
   const tenantId = useSelector((state) => state.tenant.tenantId);
   const dispatch = useDispatch();
 
@@ -31,6 +38,8 @@ const Customers = () => {
   const [severity, setSeverity] = useState("success");
   const [openSnackBar, setOpenSnackBar] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+
 
 console.log('clientes', customers);
 
@@ -88,7 +97,7 @@ console.log('clientes', customers);
       }
     }
 
-    await dispatch(getCustomers());
+    await dispatch(getCustomers(tenantId));
     setEditingCustomer(null);
   };
 
@@ -101,10 +110,46 @@ console.log('clientes', customers);
     setEditingCustomer(null);
   };
 
+  const items = customers.map(c => ({
+  id: c.Client.dni,
+  name: c.Client.name,
+  dni: c.Client.dni
+}));
+
+const handleSelect = (item) => {
+  setSelectedId(item.id);
+};
+
+
   return (
+    //<DashboardBase leftPanelData={leftPanel}/>
     <ThemeProvider theme={theme}>
+
+      <DashboardBase
+  title="Clientes"
+  buttonText="Nuevo Cliente"
+  data={items}
+  selectedId={selectedId}
+  onSelect={handleSelect}
+  onEdit={(id) => setEditingCustomer(id)}
+  onButtonClick={() => console.log("nuevo cliente")}
+  renderLeftItem={(item) => (
+    <LeftPanelItemContent
+      name={item.name}
+      dni={item.id}
+    />
+  )}
+  rightPanel={
+    selectedId ? (
+      <Typography sx={{ padding: 2 }}>
+        Cliente seleccionado: {items.find(i => i.id === selectedId)?.name}
+      </Typography>
+    ) : null
+  }
+/>
+
      
-       <Container maxWidth="xl" style={{padding:'20px'}}>
+       {/* <Container maxWidth="xl" style={{padding:'20px'}}>
           {customers.length > 0 ? (
             <Grid container spacing={2}>
               {customers.map((customer, index) => (
@@ -200,7 +245,7 @@ console.log('clientes', customers);
                             Dni: {customer.Client.dni}
                           </Typography>
                           {/* Agrega más detalles del cliente aquí según tu estructura de datos */}
-                          <EditButton onClick={() => handleEdit(customer)}>
+                          {/* <EditButton onClick={() => handleEdit(customer)}>
                             Editar
                           </EditButton>
                         </>
@@ -213,7 +258,7 @@ console.log('clientes', customers);
           ) : (
             <p>No hay clientes registrados</p>
           )}
-        </Container>
+        // </Container> */} 
         <Snackbar
           open={openSnackBar}
           autoHideDuration={2000}
@@ -224,6 +269,7 @@ console.log('clientes', customers);
         </Snackbar>
     
     </ThemeProvider>
+   
   );
 };
 

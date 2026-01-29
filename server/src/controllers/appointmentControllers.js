@@ -4,6 +4,13 @@ const { Client } = require("../db");
 const { Professional } = require("../db");
 const { Service } = require("../db");
 const { Payment } = require("../db");
+const {
+    startWhatsApp,
+    getQR,
+    getStatus,
+    sendMessage,
+    logoutWhatsApp
+} = require ('../services/whatsappservices');
 
 const postNewAppointment = async (
   date,
@@ -18,6 +25,8 @@ const postNewAppointment = async (
   const existingClient = await Client.findByPk(dni);
   const existService = await Service.findByPk(serviceId);
   const cost = existService?.cost;
+  console.log(existingClient);
+  
 
   if (existingClient) {
     const newAppointment = await Appointment.create({
@@ -41,6 +50,8 @@ const postNewAppointment = async (
       await newAppointment.setService(service);
 
       const successMessage = `Turno asignado con éxito`;
+      await sendMessage(tenantId, existingClient.phone, `Hola ${existingClient.name}, tu turno para el día ${date} a las ${time} ha sido reservado con éxito. ¡Te esperamos en Shine Look!`);
+      
       return { successMessage, newAppointment };
     }
   } else {
@@ -58,7 +69,7 @@ const getAllAppointments = async (tenantId) => {
       include: [
         {
           model: Client,
-          attributes: ['name']
+          attributes: ['name','dni','phone']
         },
         {
           model: Professional,

@@ -1,3 +1,5 @@
+
+
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import HomeIcon from "@mui/icons-material/Home";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -12,224 +14,191 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { grey } from "@mui/material/colors";
 import { css, styled } from "@mui/system";
-import * as React from "react";
+import  React,{useState} from "react";
 import logoBlanco from "../../assets/LogoBlanco.PNG";
 import Turnero from "../../views/Turnero/Turnero";
 import Dashboard from "../../views/Dashboard/Dashboard";
 import Whatsapp from "../../views/whatsapp/Whatsapp";
+import Clientes from "../../views/Customers/Customers";
+import Profesionales from "../../views/profetionals/Professionals";
+import Servicios from "../../views/Services/Services";
+import Comisiones from "../../views/Commissions/Commissions";
 import {jwtDecode} from 'jwt-decode';
-
+import { useSelector } from "react-redux";
+import CommissionsContainer from "../CommissionContainer";
 
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 
-const drawerWidth = 180;
+const drawerWidth = 240;
 const appHeight = 0;
 
-export default function SideBar({ onLogout,selectedtenant }) {
+export default function SideBar({ onLogout, selectedtenant }) {
   const { pathname } = useLocation();
-
-  const [open, setOpen] = React.useState(false);
-  const [clientesOpen, setClientesOpen] = React.useState(false);
-  const [serviciosOpen, setServiciosOpen] = React.useState(false);
-  const [profesionalesOpen, setProfesionalesOpen] = React.useState(false);
-
-  console.log("selectedTenant desde el sidebar", selectedtenant);
+  const selectedTenant = useSelector((state) => state.tenant.tenantId);
 
   const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
-  console.log("Usuario logueado desde el sidebar", loggedUser);
-  const token = loggedUser?.tokken
+  const token = loggedUser?.tokken;
   const decodedToken = jwtDecode(token);
-  console.log("Decoded Token desde el sidebar", decodedToken.role);
   const role = decodedToken.role;
-  
-  
 
-  const handleOtherItemClick = () => {
-    setOpen(false);
-    setClientesOpen(false);
-    setServiciosOpen(false);
-    setProfesionalesOpen(false);
-  };
+  console.log("=== DEBUG TOKENS ===");
+console.log("loggedUser:", loggedUser);
+console.log("token desde loggedUser:", loggedUser?.tokken);
+console.log("token correcto:", token);
+console.log('decoded token',decodedToken);
 
-  const openClientModal = () => {
-    setClientesOpen(true);
-  };
+
+  const isActive = (path) => pathname === path;
+  const bg = (path) => (isActive(path) ? "#9441FF40" : "transparent");
+  const color = (path) => (isActive(path) ? "#9441FF" : "#000000");
 
   return (
- 
+    <Box sx={{ display: "flex", flexDirection: "column", height: "100%",alignItems:'center', justifyContent:'center',backgroundColor:'#EEEEEE', boxSizing:'border-box',border:'1px solid blue'}}>
+      <CssBaseline />
 
-  <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
-    <CssBaseline />
-
-    <Drawer
-      sx={{
-        width: drawerWidth,
-        zIndex: "0",
-        flexShrink: 0,
-        "& .MuiDrawer-paper": {
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignContent: "center",
-          alignItems: "center",
-          width: drawerWidth,
-          boxSizing: "border-box",
-          backgroundColor: codGray[930],
-          border: "none",
-        },
-      }}
-      variant="permanent"
-      anchor="left"
-    >
-      <div
-        style={{
-          position: "absolute",
-          top: "10px",
-          padding: "10px",
-          width: "100%",
-        }}
-      >
-        <img
-          src={logoBlanco}
-          style={{
-            width: "100%",
-            color: dell[500],
-          }}
-          alt="Logo Blanco"
-        />
-      </div>
-      <Divider />
-      <List>
-        <ListItem
-          key={"Appointments"}
-          disablePadding
-          sx={{
-            bgcolor: pathname === "/" ? dell[500] : null,
-            width: "100%",
-          }}
-        >
-          <Link
-            to="/"
-            style={{
-              textDecoration: "none",
-              color: pathname === "/" ? dell[950] : dell[50],
-              width: "100%",
-            }}
-          >
-            <ListItemButton
-              sx={{ padding: "6px 12px" }}
-              onClick={handleOtherItemClick}
-            >
-              <ListItemIcon sx={{ minWidth: "36px" }}>
-                <HomeIcon
-                  color="primary"
-                  sx={{ color: pathname === "/" ? dell[950] : dell[50] }}
-                />
-              </ListItemIcon>
-              <ListItemText primary={"Turnos"} />
-            </ListItemButton>
-          </Link>
-        </ListItem>
-
-        <ListItem
-          key={"Dashboard"}
-          disablePadding
-          sx={{
-            bgcolor: pathname === "/Dashboard" ? dell[500] : null,
-            width: "100%",
-          }}
-        >
-          <ListItemButton
-            sx={{
-              padding: "6px 12px",
-              color: pathname === "/Dashboard" ? dell[950] : dell[50],
-              width: "100%",
-            }}
-            component={Link}
-            to="/Dashboard"
-          >
-            <ListItemIcon sx={{ minWidth: "36px" }}>
-              <DashboardIcon
-                color="primary"
-                sx={{
-                  color: pathname === "/Dashboard" ? dell[950] : dell[50],
-                }}
-              />
-            </ListItemIcon>
-            <ListItemText primary={"Panel de control"} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem
-  key={"Whatsapp"}
-  disablePadding
+     <Drawer
   sx={{
-    bgcolor: pathname === "/whatsapp" ? dell[500] : null,
-    width: "100%",
+    width: drawerWidth,
+    height: '100%',
+    zIndex: 0,
+    flexShrink: 0,
+    "& .MuiDrawer-paper": {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent:'center',
+      width: drawerWidth,
+      backgroundColor: "#FFFFFF",
+      borderTopLeftRadius: '30px',
+      borderBottomLeftRadius: '30px',
+      boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)", // <--- sombra suave
+    },
   }}
+  variant="permanent"
+  anchor="left"
 >
-  <ListItemButton
-    sx={{
-      padding: "6px 12px",
-      color: pathname === "/whatsapp" ? dell[950] : dell[50],
-      width: "100%",
-    }}
-    component={Link}
-    to="/whatsapp"
-    onClick={handleOtherItemClick}
-  >
-    <ListItemIcon sx={{ minWidth: "36px" }}>
-      {/* Puedes usar un icono de WhatsApp */}
-      <HomeIcon sx={{ color: pathname === "/whatsapp" ? dell[950] : dell[50] }} />
-    </ListItemIcon>
-    <ListItemText primary={"WhatsApp"} />
-  </ListItemButton>
-</ListItem>
-      </List>
-      <Divider />
-      <LogoutButton
+        {/* Logo */}
+        {/* <div style={{ position: "absolute", top: "10px", padding: "10px", width: "100%" }}>
+          <img src={logoBlanco} style={{ width: "100%" }} alt="Logo Blanco" />
+        </div> */}
+
+        <Divider sx={{ mt: 12 }} />
+
+        <List sx={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+
+          {/* TURNOS */}
+          <ListItem disablePadding sx={{ bgcolor: bg("/") }}>
+            <Link to="/" style={{ textDecoration: "none", color: color("/") }}>
+              <ListItemButton sx={{ padding: "6px 12px" }}>
+                <ListItemIcon>
+                  <HomeIcon sx={{ color: color("/") }} />
+                </ListItemIcon>
+                <ListItemText primary="Turnos" />
+              </ListItemButton>
+            </Link>
+          </ListItem>
+
+          {/* DASHBOARD */}
+          <ListItem disablePadding sx={{ bgcolor: bg("/Dashboard") }}>
+            <ListItemButton component={Link} to="/Dashboard" sx={{ color: color("/Dashboard") }}>
+              <ListItemIcon>
+                <DashboardIcon sx={{ color: color("/Dashboard") }} />
+              </ListItemIcon>
+              <ListItemText primary="Panel de control" />
+            </ListItemButton>
+          </ListItem>
+
+          {/* CLIENTES */}
+          <ListItem disablePadding sx={{ bgcolor: bg("/clientes") }}>
+            <ListItemButton component={Link} to="/clientes" sx={{ color: color("/clientes") }}>
+              <ListItemIcon>
+                <DashboardIcon sx={{ color: color("/clientes") }} />
+              </ListItemIcon>
+              <ListItemText primary="Clientes" />
+            </ListItemButton>
+          </ListItem>
+
+          {/* PROFESIONALES */}
+          <ListItem disablePadding sx={{ bgcolor: bg("/profesionales") }}>
+            <ListItemButton component={Link} to="/profesionales" sx={{ color: color("/profesionales") }}>
+              <ListItemIcon>
+                <DashboardIcon sx={{ color: color("/profesionales") }} />
+              </ListItemIcon>
+              <ListItemText primary="Profesionales" />
+            </ListItemButton>
+          </ListItem>
+
+          {/* SERVICIOS */}
+          <ListItem disablePadding sx={{ bgcolor: bg("/servicios") }}>
+            <ListItemButton component={Link} to="/servicios" sx={{ color: color("/servicios") }}>
+              <ListItemIcon>
+                <DashboardIcon sx={{ color: color("/servicios") }} />
+              </ListItemIcon>
+              <ListItemText primary="Servicios" />
+            </ListItemButton>
+          </ListItem>
+
+          {/* COMISIONES */}
+          <ListItem disablePadding sx={{ bgcolor: bg("/comisiones") }}>
+            <ListItemButton component={Link} to="/comisiones" sx={{ color: color("/comisiones") }}>
+              <ListItemIcon>
+                <DashboardIcon sx={{ color: color("/comisiones") }} />
+              </ListItemIcon>
+              <ListItemText primary="Comisiones" />
+            </ListItemButton>
+          </ListItem>
+
+          {/* WHATSAPP */}
+          <ListItem disablePadding sx={{ bgcolor: bg("/whatsapp") }}>
+            <ListItemButton component={Link} to="/whatsapp" sx={{ color: color("/whatsapp") }}>
+              <ListItemIcon>
+                <HomeIcon sx={{ color: color("/whatsapp") }} />
+              </ListItemIcon>
+              <ListItemText primary="WhatsApp" />
+            </ListItemButton>
+          </ListItem>
+
+        </List>
+
+        <Divider />
+
+        {/* LOGOUT */}
+        <LogoutButton
+          sx={{
+            position: "absolute",
+            bottom: "30px",
+          }}
+          onClick={onLogout}
+        >
+          <LogoutIcon /> Salir
+        </LogoutButton>
+      </Drawer>
+
+      {/* RENDER DE VISTAS */}
+      <Box
+        component="main"
         sx={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "fit-content",
-          bottom: "30px",
-          position: "absolute",
+          position: "fixed",
+          flexGrow: 1,
+          ml: `${drawerWidth}px`,
+          height: `calc(100vh - ${appHeight}px)`,
+          width: `calc(100% - ${drawerWidth}px)`,
         }}
-        onClick={onLogout}
       >
-        <LogoutIcon /> Salir
-      </LogoutButton>
-    </Drawer>
+        <Routes>
+          <Route path="/" element={<Turnero />} />
+          <Route path="/Dashboard" element={<Dashboard drawerWidth={drawerWidth} appHeight={appHeight} />} />
+          <Route path="/whatsapp" element={<Whatsapp />} />
 
-    <Box
-      component="main"
-      sx={{
-        position: "fixed",
-        flexGrow: 1,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        ml: `${drawerWidth}px`,
-        height: `calc(100vh - ${appHeight}px)`,
-        width: `calc(100% - ${drawerWidth}px)`,
-      }}
-    >
-      <Routes>
-        <Route path="/" element={<Turnero />} />
-        <Route
-          path="/Dashboard"
-          element={
-            <Dashboard drawerWidth={drawerWidth} appHeight={appHeight} />
-          }
-        />
-        <Route path="/whatsapp" element={<Whatsapp />} />
-
-      </Routes>
+          {/* NUEVAS SECCIONES */}
+          <Route path="/clientes" element={<Clientes />} />
+          <Route path="/profesionales" element={<Profesionales />} />
+          <Route path="/servicios" element={<Servicios />} />
+          <Route path="/comisiones" element={<CommissionsContainer />} />
+        </Routes>
+      </Box>
     </Box>
-  </Box>
-);
-
+  );
 }
 
 const dell = {
@@ -261,40 +230,6 @@ const codGray = {
   950: "#0b0b0a",
 };
 
-const LogoutButton = styled("button")(
-  ({ theme }) => css`
-    font-family: "IBM Plex Sans", sans-serif;
-    font-weight: 600;
-    font-size: 0.875rem;
-    line-height: 1.5;
-    padding: 8px 16px;
-    border-radius: 8px;
-    transition: all 150ms ease;
-    cursor: pointer;
-    background: ${theme.palette.mode === "dark" ? green[900] : dell[50]};
-    // border: 1px solid ${theme.palette.mode === "dark" ? green[700] : green[200]};
-    border:none;
-    color: ${theme.palette.mode === "dark" ? grey[200] : dell[900]};
-    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-
-    &:hover {
-      background: ${theme.palette.mode === "dark" ? green[800] : dell[500]};
-      border-color: ${theme.palette.mode === "dark" ? green[600] : dell[300]};
-      color: ${theme.palette.mode === "dark" ? green[600] : dell[950]};
-    }
-
-    &:active {
-      background: ${theme.palette.mode === "dark" ? green[700] : green[300]};
-    }
-
-    &:focus-visible {
-      box-shadow: 0 0 0 4px
-        ${theme.palette.mode === "dark" ? green[300] : green[200]};
-      outline: none;
-    }
-  `
-);
-
 const green = {
   50: "#E7F6E7",
   100: "#C2E6C1",
@@ -307,3 +242,23 @@ const green = {
   800: "#1A751A",
   900: "#145E14",
 };
+
+const LogoutButton = styled("button")(
+  ({ theme }) => css`
+    font-family: "IBM Plex Sans", sans-serif;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    background: ${dell[50]};
+    border: none;
+    color: ${dell[900]};
+    transition: 0.2s;
+
+    &:hover {
+      background: ${dell[500]};
+      color: ${dell[950]};
+    }
+  `
+);

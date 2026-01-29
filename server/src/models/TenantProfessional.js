@@ -34,7 +34,7 @@ module.exports = (sequelize) => {
     totalRating: {
       type: DataTypes.INTEGER,
       allowNull: true,        
-      defaultValue: null,
+      defaultValue: 0,
     },
     ratingCount: {
       type: DataTypes.INTEGER,
@@ -44,7 +44,7 @@ module.exports = (sequelize) => {
     ratingAverage:{
       type: DataTypes.FLOAT,
       allowNull: true,
-      defaultValue: null,
+      defaultValue: 0,
     }
   });
 };

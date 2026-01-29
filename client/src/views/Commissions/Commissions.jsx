@@ -42,6 +42,9 @@ const Commissions = ({
   const [openDetail, setOpenDetail] = useState(false);
   const [totalDiario, setTotalDiario] = useState(0);
 
+  console.log('monto total', totalAmount);
+  
+
   useEffect(() => {
     if (selectedMonth) {
       handleMonthCommissions();
@@ -59,7 +62,8 @@ const Commissions = ({
     const fetchingCommissions = async () => {
       const resp = await axios.post(`${urlApi}commission`, {date: dateData.date,tenantId: tenantId});
    
-
+      console.log('respuesta fetch comisiones',resp);
+      
       // Filtrar el array resp.data en dos arrays separados
       const withProfessional = resp.data.filter((item) => item.Professional);
       const withoutProfessional = resp.data.filter(
@@ -216,33 +220,34 @@ const Commissions = ({
   };
 
   const calcTotals = (commissions) => {
-    let total = 0;
-    let efectivoAmount = 0;
-    let otherAmount = 0;
+  // Asegurarnos que commissions siempre sea un array
+  if (!Array.isArray(commissions)) commissions = [];
 
-    if (commissions && commissions.length > 0) {
-      commissions.forEach((commission) => {
-        total += commission.Appointment.Payments[0].amount;
+  let total = 0;
+  let efectivoAmount = 0;
+  let otherAmount = 0;
 
-        const appointment = commission.Appointment;
-        if (
-          appointment &&
-          appointment.Payments &&
-          appointment.Payments.length > 0
-        ) {
-          appointment.Payments.forEach((payment) => {
-            if (payment.payment_mode === "Efectivo") {
-              efectivoAmount += payment.depositAmount;
-            } else {
-              otherAmount += payment.depositAmount;
-            }
-          });
+  commissions.forEach((commission) => {
+    // Validar que exista Appointment y Payments
+    const appointment = commission?.Appointment;
+    const payments = appointment?.Payments;
+
+    if (Array.isArray(payments) && payments.length > 0) {
+      payments.forEach((payment) => {
+        const amount = payment?.depositAmount || 0; // proteger contra undefined/null
+        total += amount;
+
+        if (payment?.payment_mode === "Efectivo") {
+          efectivoAmount += amount;
+        } else {
+          otherAmount += amount;
         }
       });
     }
+  });
 
-    return { total, efectivoAmount, otherAmount };
-  };
+  return { total, efectivoAmount, otherAmount };
+}
 
   const calcTotalsWithoutProffesional = (commissions) => {
     let total = 0;
@@ -390,110 +395,7 @@ const Commissions = ({
                 </Table>
               </TableContainer>
 
-              {/* <CustomDivider />
-
-              <TableContainer sx={{ width: "100%", height: "40%" }}>
-                <Table stickyHeader aria-label="sticky table">
-                  <TableHead>
-                    <TableCell class="cellTitle" colSpan={13} align="center">
-                      No Asistidos
-                    </TableCell>
-                    <TableRow>
-                      <TableCell class="cellHead" align="center"></TableCell>
-                      <TableCell class="cellHead" align="center"></TableCell>
-                      <TableCell class="cellHead" align="center"></TableCell>
-                      <TableCell class="cellHead" align="center"></TableCell>
-                      <TableCell class="cellHead" align="center">
-                        Fecha
-                      </TableCell>
-                      <TableCell class="cellHead" align="center">
-                        Profesional
-                      </TableCell>
-                      <TableCell class="cellHead" align="center">
-                        Cliente
-                      </TableCell>
-
-                      <TableCell class="cellHead" align="center">
-                        Total
-                      </TableCell>
-                      <TableCell class="cellHead" align="center"></TableCell>
-                      <TableCell class="cellHead" align="center">
-                        {" "}
-                      </TableCell>
-                      <TableCell class="cellHead" align="center">
-                        {" "}
-                      </TableCell>
-                      <TableCell class="cellHead" align="center">
-                        {" "}
-                      </TableCell>
-                      <TableCell class="cellHead" align="center">
-                        {" "}
-                      </TableCell>
-                      <TableCell class="cellHead" align="center">
-                        {" "}
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody sx={{ overflow: "hidden" }}>
-                    {Object.entries(totalToRenderProfessional).map(
-                      ([name, { total, dni, Appointment }]) => (
-                        <TableRow key={name}>
-                          <TableCell
-                            class="cellBody"
-                            align="center"></TableCell>
-                          <TableCell
-                            class="cellBody"
-                            align="center"></TableCell>
-                          <TableCell
-                            class="cellBody"
-                            align="center"></TableCell>
-                          <TableCell
-                            class="cellBody"
-                            align="center"></TableCell>
-                          <TableCell class="cellBody" align="center">
-                            {dayjs(Appointment.date, "YYYY-MM-DD").format(
-                              "DD-MM-YYYY"
-                            )}
-                          </TableCell>
-                          <TableCell class="cellBody" align="center">
-                            {Appointment?.Professional?.name}
-                          </TableCell>
-                          <TableCell class="cellBody" align="center">
-                            {Appointment?.Client.name}
-                          </TableCell>
-                          <TableCell class="cellBody" align="center">
-                            {Appointment && Appointment.Payments
-                              ? `$ ${Appointment.Payments.reduce(
-                                  (acc, payment) => acc + payment.depositAmount,
-                                  0
-                                )}`
-                              : 0}
-                          </TableCell>
-                          <TableCell
-                            class="cellBody"
-                            align="center"></TableCell>
-                          <TableCell
-                            class="cellBody"
-                            align="center"></TableCell>
-                          <TableCell
-                            class="cellBody"
-                            align="center"></TableCell>
-                          <TableCell
-                            class="cellBody"
-                            align="center"></TableCell>
-                          <TableCell
-                            class="cellBody"
-                            align="center"></TableCell>
-                          <TableCell
-                            class="cellBody"
-                            align="center"></TableCell>
-                        </TableRow>
-                      )
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer> */}
-
+             
               <CustomDivider />
 
               <div

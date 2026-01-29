@@ -10,6 +10,7 @@ const commissionRouter = require('../routes/commissionRouter');
 const tenantRouter = require ('../routes/tenantRouter');
 const mercadoPagoRouter = require ('../routes/mercadoPagoRouter');
 const whatsappRouter = require ('../routes/whatsappRouter');
+const ratingRouter = require ('../routes/ratingRouter');
 const router = Router();
 
 router.use('/login',loginRouter);
@@ -22,5 +23,6 @@ router.use('/commission',commissionRouter);
 router.use('/tenant',tenantRouter);
 router.use('/tenant-payment',mercadoPagoRouter);
 router.use('/whatsapp',whatsappRouter);
+router.use('/rating',ratingRouter);
 
 module.exports = router;

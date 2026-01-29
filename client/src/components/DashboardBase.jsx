@@ -1,259 +1,181 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Box, styled, Typography, Button, Card } from '@mui/material';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import NextAppointmentsList from "./NextAppointmentsList";
-import IconButton from '@mui/material/IconButton';
+import React from "react";
+import { Box, styled, Typography, Button, Card, IconButton } from "@mui/material";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
-//import NextAppointmentsList from "./RightPanelList";
-
-
-const DashboardBase = ({title,icon,buttonText,leftPanelData,selectedId, setSelectedId,tenantId,setEditingId}) => {
-    console.log('leftpanelData',leftPanelData);
-    
+const DashboardBase = ({
+  title,
+  icon,
+  buttonText,
+  data,
+  selectedId,
+  onSelect,
+  onEdit,
+  onButtonClick,
+  renderLeftItem,
+  rightPanel,
+}) => {
   return (
     <MainContainer>
-        <HeaderContainer>
-            <Typography sx={{fontSize:'32px',fontWeight:600,fontFamily:'poppins'}}>{title}</Typography>
-            <CustomButton >
-                {icon}
-                {buttonText}
-            </CustomButton>
-        </HeaderContainer>
-        <ContentContainer>
-            <LeftPanel>
-                <LeftPanelList>
-                   {leftPanelData.map(item => (
-                   <LeftPanelCards
-                      key={item.id}
-                      selected={selectedId === item.Professional.dni}
-                      onClick={() => setSelectedId(item.Professional.dni)} // solo selecciona la card
-                    >
-  <Typography>{item.Professional.name}</Typography>
-  <Typography>{item.Professional.dni}</Typography>
+      <HeaderContainer>
+        <Typography sx={{ fontSize: "32px", fontWeight: 600 }}>
+          {title}
+        </Typography>
 
-  <ActionCardContainer>
-    <IconButton
-      onClick={(e) => {
-        e.stopPropagation(); // evita que el click seleccione la card
-        setEditingId(item.Professional.dni); // abre el modal
-      }}
-    >
-      <EditOutlinedIcon />
-    </IconButton>
-    <IconButton>
-      <DeleteOutlineIcon />
-    </IconButton>
-  </ActionCardContainer>
-</LeftPanelCards>
-                         ))}
-                </LeftPanelList>
-            </LeftPanel>
-            
-            <RightPanel>
-              
-                <RightPanelCardsContainer>
-                  <RightPanelCards
-                  selectedId={selectedId}
+        <CustomButton onClick={onButtonClick}>
+          {icon}
+          {buttonText}
+        </CustomButton>
+      </HeaderContainer>
+
+      <ContentContainer>
+        {/* LEFT PANEL */}
+        <LeftPanel>
+          <LeftPanelList>
+            {data.map((item) => (
+              <LeftPanelCard
+                key={item.id}
+                selected={selectedId === item.id}
+                onClick={() => onSelect(item)}
+              >
+                {renderLeftItem(item)}
+
+                <ActionCardContainer>
+                  <IconButton
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onEdit(item.id);
+                    }}
                   >
-                   {leftPanelData
-                    .filter(item => item.Professional.dni === selectedId)
-                    .map(filteredItem => (
-                      <ProfileImage
-                        key={filteredItem.id}
-                        src={filteredItem.Professional.profileImage}
-                        alt={filteredItem.Professional.name}
-                        
-                      />
-                    ))}
-                    
-                  </RightPanelCards>
-                  <RightPanelCards></RightPanelCards>
-                  <RightPanelCards></RightPanelCards>
-                </RightPanelCardsContainer>
-                
-               <NextAppointmentsList selectedId={selectedId} tenantId={tenantId} />
+                    <EditOutlinedIcon />
+                  </IconButton>
 
-            </RightPanel>
+                  <IconButton>
+                    <DeleteOutlineIcon />
+                  </IconButton>
+                </ActionCardContainer>
+              </LeftPanelCard>
+            ))}
+          </LeftPanelList>
+        </LeftPanel>
 
-        </ContentContainer>
+        {/* RIGHT PANEL */}
+        <RightPanel>{rightPanel}</RightPanel>
+      </ContentContainer>
     </MainContainer>
-  )
-}
+  );
+};
 
+export default DashboardBase;
 
-export default DashboardBase
+/* ================= STYLES ================= */
 
-const MainContainer = styled(Box)(({ theme }) => ({
-  width: '100%',
-  minHeight: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'stretch', // importante para que los paneles ocupen todo el ancho
-  justifyContent: 'flex-start', // no centrar verticalmente
-  padding: '20px 40px',
-  boxSizing: 'border-box',
-  backgroundColor:'#EEEEEE'
-}));
-
-const HeaderContainer = styled(Box)(({ theme }) => ({
- width: '100%',
- minHeight: '150px',
- display: 'flex',
- flexDirection: 'row',
- alignItems: 'center',
- justifyContent:'space-between',
- //border:'1px solid #E0E0E0',
-}));
-
-const ContentContainer = styled(Box)(({ theme }) => ({
-  width: '100%',
-  flex: 1, // que ocupe todo el espacio restante
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'stretch', // estira paneles al 100% vertical
-  justifyContent: 'space-between',
-  gap: '20px',
-}));
-
-const LeftPanel = styled(Box)(({ theme }) => ({
-  flex: 1,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'stretch', // estira el contenido horizontalmente
-  justifyContent: 'flex-start', // evita que los elementos se separen verticalmente
-  padding: '20px',
-  backgroundColor: '#FBFBFB',
-  borderRadius: '15px',
-  boxShadow: '0px 4px 4px rgba(0,0,0,0.25)',
-}));
-
-const RightPanel = styled(Box)(({ theme }) => ({
-  width:'50%',
-  minHeight:'100%',
-  //flex: 1,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'stretch',
-  justifyContent: 'flex-start',
-  //padding: '20px',
-  //backgroundColor: 'transparent',
-  borderRadius: '15px',
-  borderr:'1px solid  red',
-  gap: '20px',
-  //boxShadow: '0px 4px 4px rgba(0,0,0,0.25)',
-}));
-
-const CustomButton = styled(Button)(({ theme }) => ({
- width: '232px',
- height: '48px',
- display: 'flex',
- flexDirection: 'row',
- alignItems: 'center',
- justifyContent:'space-around',
- padding:'5px',
- color: '#fff',
- background: 'linear-gradient(90deg, #B985FF 0%, #5B2B99 100%)',
- textTransform: 'none',
- fontFamily: 'arial',
- fontSize:'18px',
- fontWeight:400,
- borderRadius:'10px',
- boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-
+const MainContainer = styled(Box)({
+  width: "100%",
+  minHeight: "100vh",
+  height:'100vh',
+  display: "flex",
+  flexDirection: "column",
+  padding: "20px 40px",
+  backgroundColor: "#EEEEEE",
+  border:'1px solid red',
   
-  '&:hover': {
-    background: 'linear-gradient(90deg, #A66DF8 0%, #51248A 100%)',
-  },
-}));
-
-const LeftPanelList = styled(Box)(({ theme }) => ({
-  width: '100%',
-  flex: 1, // que ocupe todo el espacio vertical del panel
-  display: 'flex',
-  flexDirection: 'column',
-  padding: '10px',
-  overflowY: 'auto',
-  overflowX: 'hidden',
-  gap: '10px',
-  backgroundColor: 'transparent',
-}));
-
-const LeftPanelCards = styled(Card)(({ selected }) => ({
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  width: '100%',
-  height: '80px',
-  padding: '15px',
-  borderRadius: '5px',
-  cursor: 'pointer',
-  backgroundColor: 'rgba(237, 237, 237, 0.5)',
-  transition: '0.2s ease',
-
-  border: selected ? '1px solid #9441FF' : '1px solid transparent',
-  boxShadow: selected
-    ? '0px 4px 4px rgba(148, 65, 255, 0.25)'
-    : 'none',
-
-  '&:hover': {
-    backgroundColor: '#F7F3FF',
-  },
-}));
-
-
-const ActionCardContainer = styled(Box)(({ theme }) => ({
-  width: '80px',
-  height: '20px',
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  backgroundColor: 'transparent',
-  
-}));
-
-
-const RightPanelCardsContainer = styled(Box)(({ theme }) => ({
- width: '100%',
- height: 'auto',
- display: 'flex',
- flexDirection: 'row',
- alignItems: 'center',
- justifyContent: 'space-between',
- gap: '20px',
-
-}));
-
-const RightPanelCards = styled(Box)({
-width: "200px",
-height: "125px",
-display: "flex",
-flexDirection: "column",
-alignItems: "center",
-justifyContent: "center",
-backgroundColor: "#FBFBFB",
-borderRadius: "15px",
-boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
-padding:'20px'
 });
 
-const ProfileImage = styled('img')(({ theme }) => ({
-  width: '115px',
-  height: '115px',
-  borderRadius: '50%',
-  display:'flex',
-  alignItems:'center',
-  justifyContent:'center',      // hace que sea circular
-  objectFit: 'cover',       // mantiene proporción sin deformar
-  border: `1px solid #9441FF`, // borde opcional
-   boxShadow: '0px 4px 4px rgba(148, 65, 255, 0.25)',  // sombra suave
-  transition: 'transform 0.2s',
-  '&:hover': {
-    transform: 'scale(1.05)', // efecto al pasar el mouse
-  }
+const HeaderContainer = styled(Box)({
+  height: "120px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+});
+
+const ContentContainer = styled(Box)({
+  flex: 1,
+  display: "flex",
+  gap: "20px",
+  overflow: "hidden", 
+  
+});
+
+const LeftPanel = styled(Box)({
+  flex: 1,
+  padding: "20px",
+  backgroundColor: "#FBFBFB",
+  borderRadius: "15px",
+  boxShadow: "0px 4px 4px rgba(0,0,0,0.25)",
+  display: "flex",
+  flexDirection: "column",
+ // marginBottom:'10px'
+  // overflow: "hidden",
+ // paddingBottom: "12px", 
+ // border:'1px solid blue'
+});
+
+
+const RightPanel = styled(Box)({
+  width: "50%",
+  display: "flex",
+  flexDirection: "column",
+  gap: "20px",
+});
+
+const CustomButton = styled(Button)({
+  width: "232px",
+  height: "48px",
+  display: "flex",
+  justifyContent: "space-around",
+  color: "#fff",
+  background: "linear-gradient(90deg, #B985FF 0%, #5B2B99 100%)",
+  textTransform: "none",
+  borderRadius: "10px",
+});
+
+const LeftPanelList = styled(Box)({
+   display: "flex",
+  flexDirection: "column",
+  gap: "10px",
+  flex: 1,
+  overflowY: "auto",
+
+  /* Firefox */
+  scrollbarWidth: "thin",
+  scrollbarColor: "#B0B0B0 transparent",
+
+  /* Chrome / Edge / Safari */
+  "&::-webkit-scrollbar": {
+    width: "1px",
+  },
+  "&::-webkit-scrollbar-track": {
+    background: "transparent",
+  },
+  "&::-webkit-scrollbar-thumb": {
+    backgroundColor: "#C0C0C0",
+    borderRadius: "0px",
+  },
+  "&::-webkit-scrollbar-thumb:hover": {
+    backgroundColor: "#A0A0A0",
+  },
+});
+
+
+
+const LeftPanelCard = styled(Card)(({ selected }) => ({
+  height: "80px",
+  minHeight: "80px",      // 🔑
+  flexShrink: 0,          // 🔑 CLAVE
+  padding: "15px",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  cursor: "pointer",
+  backgroundColor: "rgba(237,237,237,0.5)",
+  border: selected ? "1px solid #9441FF" : "1px solid transparent",
+  borderRadius:'10px'
+  
 }));
 
-
-
+const ActionCardContainer = styled(Box)({
+  width: "80px",
+  display: "flex",
+  justifyContent: "space-between",
+});

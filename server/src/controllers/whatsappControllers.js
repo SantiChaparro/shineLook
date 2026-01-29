@@ -13,6 +13,8 @@ const startController = async () => {
     new Promise((resolve) => {
       const interval = setInterval(() => {
         const qr = getQR();
+        console.log('qr desde dentro de funcion',qr);
+        
         if (qr) {
           clearInterval(interval);
           resolve(qr);
@@ -28,6 +30,8 @@ const startController = async () => {
   const qr = await waitForQR();
   const status = await getStatus();
   console.log('QR desde startController:', qr);
+  console.log('status',status);
+  
 
   return { qr, status };
 };

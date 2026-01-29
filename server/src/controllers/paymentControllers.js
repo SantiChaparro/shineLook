@@ -1,5 +1,7 @@
-const { Payment, Appointment, Commission, Professional, Service, Tenants } = require('../db');
+const { Payment, Appointment, Commission, Professional, Service, Tenants, Client } = require('../db');
 const { calcCommission } = require('../assets/funtions/calcCommission');
+const { generateRatingMessage  } = require('../assets/funtions/generateRatingMessage.js');
+const { sendMessage } = require('../services/whatsappservices.js');
 
 const postNewPayment = async (payment_day, amount, payment_mode, appointmentsId, completePayment, depositAmount, isDeposit, attended, tenantId) => {
     let amountValues = parseFloat(depositAmount);
@@ -13,7 +15,7 @@ const postNewPayment = async (payment_day, amount, payment_mode, appointmentsId,
             
             const appointmentId = appointmentsId[0]; // Se asume que appointmentsId contiene un solo ID en este caso
             const appointment = await Appointment.findByPk(appointmentId, {
-                include: [{ model: Professional }, { model: Service }, { model: Payment }]
+                include: [{ model: Professional }, { model: Service }, { model: Payment }, {model: Client}]
             });
             console.log('tenantId antes de findbypk',tenantId);
             
@@ -26,6 +28,26 @@ const postNewPayment = async (payment_day, amount, payment_mode, appointmentsId,
             }
 
             await Payment.update({ attended: attended }, { where: { AppointmentId: appointmentId } });
+
+
+            //logica de envio de encuesta de satisfaccion
+                const clientPhone = appointment.Client.phone;   // asegurate de incluir Client en el include arriba
+            const clientName = appointment.Client.name;     //
+
+            const ratingMessage = generateRatingMessage(
+                clientName,
+                appointmentId,
+                tenantId,
+                appointment.Professional.dni
+            );
+
+            try {
+                await sendMessage(tenantId, `549${clientPhone}`, ratingMessage);
+                console.log("Mensaje de rating enviado correctamente");
+            } catch (error) {
+                console.error("Error al enviar rating:", error.message);
+            }
+
 
             // Verificar si ya existe una comisión para esta cita
 

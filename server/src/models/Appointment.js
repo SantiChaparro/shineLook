@@ -1,4 +1,5 @@
 const {DataTypes} = require("sequelize");
+const { all } = require("../routes");
 
 
 module.exports = (sequelize) => {
@@ -35,6 +36,11 @@ module.exports = (sequelize) => {
         cost:{
             type:DataTypes.FLOAT,
             allowNull:false
+        },
+        hasBeenRated:{
+            type:DataTypes.BOOLEAN,
+            allowNull:true,
+            defaultValue:false
         }
     })
 };

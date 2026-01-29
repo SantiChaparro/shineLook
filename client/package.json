@@ -38,6 +38,7 @@
     "react-big-calendar": "^1.10.1",
     "react-calendar": "^4.8.0",
     "react-dom": "^18.2.0",
+    "react-qr-code": "^2.0.18",
     "react-redux": "^9.1.0",
     "react-router-dom": "^6.22.0",
     "react-scripts": "5.0.1",
@@ -70,6 +71,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react-big-calendar": "^1.8.9"
+    "@types/react-big-calendar": "^1.8.9",
+    "eslint": "^8.57.1"
   }
 }

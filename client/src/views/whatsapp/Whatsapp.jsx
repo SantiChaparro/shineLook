@@ -1,133 +1,90 @@
 import React, { useEffect, useState } from "react";
-import { Box, Typography, Button, CircularProgress } from "@mui/material";
+import { Box, Typography, CircularProgress } from "@mui/material";
 import QRCode from "react-qr-code";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
-const Whatsapp = () => {
-  const [qrValue, setQrValue] = useState("");
+export default function Whatsapp() {
+  const tenantId = useSelector((state) => state.tenant.tenantId);
+  const [qr, setQr] = useState(null);
   const [connected, setConnected] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [sending, setSending] = useState(false); // para indicar envío de mensaje
 
-  // Generar sesión y obtener QR
-useEffect(() => {
+ useEffect(() => {
+  if (!tenantId) return;
+
   let interval;
 
-  const startSession = async () => {
+  const start = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      await axios.post("http://localhost:3001/whatsapp/start-session");
-    } catch (error) {
-      console.error("Error iniciando sesión:", error);
+      await axios.post("http://localhost:3001/whatsapp/start-session", { tenantId });
+    } catch (err) {
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  const pollStatus = async () => {
+  const poll = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:3001/whatsapp/get-qr",
+      const status = await axios.get(
+        `http://localhost:3001/whatsapp/session-status/${tenantId}`,
         { headers: { "Cache-Control": "no-cache" } }
       );
 
-      const status = await axios.get('http://localhost:3001/whatsapp/session-status');
-      console.log('status del polling',status);
-
-      // ✅ Si hay QR, lo mostramos
-      if (res.data?.qr) {
-        setQrValue(res.data.qr);
-      }
-
-      // ✅ Si está conectado, cortamos polling
-      if (status.data?.connected) {
+      if (status.data.connected) {
         setConnected(true);
-        setQrValue(null);
-        clearInterval(interval);
+        setQr(null);
+        return;
       }
 
+      const qrRes = await axios.get(
+        `http://localhost:3001/whatsapp/get-qr/${tenantId}`,
+        { headers: { "Cache-Control": "no-cache" } }
+      );
+
+      setQr(qrRes.data.qr || null);
     } catch (err) {
-      console.error("Error obteniendo QR:", err);
+      console.error(err);
     }
   };
 
-  startSession();
-
-  interval = setInterval(pollStatus, 2000);
+  start();
+  interval = setInterval(poll, 2000);
 
   return () => clearInterval(interval);
-}, []);
+}, [tenantId]); // ✅ SOLO tenantId
 
-
-
-  // Verificar estado de la sesión
-  const checkConnection = async () => {
-    try {
-      const res = await axios.get("http://localhost:3001/whatsapp/session-status");
-      if (res.data.connected) {
-        setConnected(true);
-      } else {
-        alert("Aún no se ha escaneado el QR.");
-      }
-    } catch (error) {
-      console.error("Error al verificar estado de sesión:", error);
-    }
-  };
-
-  // Enviar mensaje
-  const handleSendMessage = async () => {
-    setSending(true);
-    try {
-      const res = await axios.post("http://localhost:3001/whatsapp/send-message", {
-        to: "5493513681649", // número de prueba
-        text: "Hola amor 😘, ame tus fotos jejeje!"
-      });
-      console.log('respuesta del envio',res);
-      
-      
-    } catch (error) {
-      console.error("Error enviando mensaje:", error);
-      alert("Error enviando mensaje");
-    } finally {
-      setSending(false);
-    }
-  };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 3, p: 4, alignItems: "center" }}>
+    <Box
+      sx={{
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        gap: 3,
+        p: 4,
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Typography variant="h5">Conectar WhatsApp</Typography>
 
       {connected ? (
-        <>
-          <Typography variant="subtitle1" color="green">¡Conectado!</Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ mt: 2 }}
-            onClick={handleSendMessage}
-            disabled={sending}
-          >
-            {sending ? "Enviando..." : "Enviar mensaje"}
-          </Button>
-        </>
+        <Typography variant="h6" color="success.main">
+          ✅ WhatsApp conectado
+        </Typography>
       ) : loading ? (
         <CircularProgress />
-      ) : (
+      ) : qr ? (
         <>
-          <Typography>Escanea este QR con tu WhatsApp para conectar:</Typography>
-          {qrValue && <QRCode value={qrValue} size={200} />}
-          <Button
-            variant="contained"
-            color="success"
-            sx={{ mt: 2 }}
-            onClick={checkConnection}
-          >
-            Verificar conexión
-          </Button>
+          <Typography>Escaneá este QR con WhatsApp</Typography>
+          <QRCode value={qr} size={220} />
         </>
+      ) : (
+        <Typography color="text.secondary">Esperando QR...</Typography>
       )}
     </Box>
   );
-};
-
-export default Whatsapp;
+}

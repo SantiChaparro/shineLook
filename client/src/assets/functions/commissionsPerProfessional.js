@@ -1,24 +1,23 @@
-
-
 const commissionsPerProfessional = (commissions) => {
-    const commissionPerProfessional = [];
+    if (!Array.isArray(commissions)) commissions = [];
 
-    commissions.forEach(commission => {
+    const commissionPerProfessional = {};
+
+    commissions.forEach((commission) => {
         const professionalName = commission.Professional?.name;
-        const amount = commission.amount;
-        const dni = commission.Professional.dni; // Obtener el DNI del profesional
+        const amount = commission.amount || 0;
+        const dni = commission.Professional?.dni;
 
         if (!commissionPerProfessional[professionalName]) {
-            commissionPerProfessional[professionalName] = { total: 0, dni: dni }; // Incluir el DNI del profesional
+            commissionPerProfessional[professionalName] = { total: 0, dni: dni };
         }
 
         commissionPerProfessional[professionalName].total += amount;
     });
 
     for (const key in commissionPerProfessional) {
-        commissionPerProfessional[key].total = Math.round(commissionPerProfessional[key].total * 100) / 100;
-
-
+        commissionPerProfessional[key].total =
+            Math.round(commissionPerProfessional[key].total * 100) / 100;
     }
 
     return commissionPerProfessional;

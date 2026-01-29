@@ -13,6 +13,7 @@ client/node_modules/.cache/default-development/5.pack
 # WhatsApp Web JS
 server/.wwebjs_auth/
 server/.wwebjs_cache/
+server/auth
 
 # testing
 /coverage

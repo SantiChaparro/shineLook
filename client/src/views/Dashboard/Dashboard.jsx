@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import dayjs from "dayjs";
 import React from "react";
 import LogoAdvertencia from "../../assets/LogoAdvertencia.png";
@@ -12,7 +11,7 @@ import NewProfessionalForm from "../NewProfessionalForm/NewProfessionalForm";
 import NewServiceForm from "../NewService/NewServiceForm";
 import Professionals from "../profetionals/Professionals";
 import Services from "../Services/Services";
-import { css, fontWeight, styled } from "@mui/system";
+import { styled } from "@mui/system";
 import styles from "./Dashboard.module.css";
 import { Divider } from "@mui/material";
 import { jwtDecode } from 'jwt-decode';
@@ -24,30 +23,15 @@ const Dashboard = ({ drawerWidth, appHeight }) => {
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState(null);
 
-//const user = JSON.parse(localStorage.getItem("loggedUser"));
-// const decodedUser = jwtDecode(localStorage.getItem("tokken"));
- // console.log('decodeduder',decodedUser);
-
-
-
- console.log(localStorage);
-   const loggedUser = localStorage.getItem("loggedUser");
-   console.log('user',loggedUser);
-  
-   const user = jwtDecode(loggedUser);
-   console.log('decodeduser',user);
-  
+  const loggedUser = localStorage.getItem("loggedUser");
+  const user = jwtDecode(loggedUser);
   const profesionalRol = user.role;
-
 
   const handleFilterChange = (event) => {
     setSelectedFilter(event.target.value);
-
-
   };
 
   const renderFilterCommissions = (selectedFilter, commissions) => {
-
     if (selectedFilter === "Liquidado") {
       return commissions.filter(commission => commission.paid === true);
     } else if (selectedFilter === "no-liquidado") {
@@ -55,43 +39,32 @@ const Dashboard = ({ drawerWidth, appHeight }) => {
     } else {
       return commissions;
     }
-
   };
 
   const handleMonthChange = (event) => {
-
-    setSelectedMonth(event.target.value)
-
-
+    setSelectedMonth(event.target.value);
   };
 
   const handleDateChange = (date) => {
     const newDate = dayjs(date, "YYYY-MM-DD").format("YYYY-MM-DD");
     setSelectedDate(newDate);
-    setSelectedMonth("00")
-    setSelectedDatePick(date)
+    setSelectedMonth("00");
+    setSelectedDatePick(date);
   };
 
   const handleOpcionSeleccionada = (opcion) => {
-
     setOpcionSeleccionada(opcion);
   };
 
   const formatDate = (date) => {
-
-
     const newDate = dayjs(date, "YYYY-MM-DD").format("YYYY-MM-DD");
-
     return newDate;
   };
-
-
 
   useEffect(() => {
     const newdate = dayjs();
     const formatedDate = formatDate(newdate);
-    setSelectedDatePick(newdate)
-
+    setSelectedDatePick(newdate);
     setSelectedDate(formatedDate);
   }, []);
 
@@ -142,12 +115,9 @@ const Dashboard = ({ drawerWidth, appHeight }) => {
             <div
               style={{
                 width: "100%",
-                height: "100%",
+                height: "100vh",  // Establecer altura completa
                 display: "flex",
                 flexDirection: "column",
-                alignContent: "center",
-                justifyContent: "center",
-                // border: "solid orange 3px",
                 overflow: 'hidden',
               }}>
               <div
@@ -155,8 +125,7 @@ const Dashboard = ({ drawerWidth, appHeight }) => {
                   width: "100%",
                   display: "flex",
                   flexDirection: "column",
-                  height: 'fit-content',
-                  justifyContent: 'center',
+                  justifyContent: "center",
                 }}>
                 <CommissionsNavBar
                   selectedDate={selectedDatePick}
@@ -166,13 +135,14 @@ const Dashboard = ({ drawerWidth, appHeight }) => {
                   selectedMonth={selectedMonth}
                   onFilterChange={handleFilterChange}
                 />
-                <CustomDivider/>
+                <CustomDivider />
               </div>
               <div style={{
-                display: 'flex', height: '100%', overflowX: 'hidden', overflowY: 'scroll'
-                // border:'solid blue 3px'
+                display: 'flex',
+                flex: 1,  // Ocupa el espacio restante
+                overflowX: 'hidden', 
+                overflowY: 'scroll'
               }}>
-               
                 <Commissions
                   selectedDate={selectedDate}
                   selectedMonth={selectedMonth}
@@ -186,7 +156,7 @@ const Dashboard = ({ drawerWidth, appHeight }) => {
         } else {
           return (
             <ErrorModal
-              style={{ width: "100%", height: "100%", display: "flex" }}
+              style={{ width: "100%", height: "100vh", display: "flex" }}
             />
           );
         }
@@ -202,7 +172,7 @@ const Dashboard = ({ drawerWidth, appHeight }) => {
   };
 
   return (
-    <div className={styles.blueContainer}>
+    <div className={styles.blueContainer} style={{ height: "100vh" }}>  {/* Ajustado a 100vh */}
       <div
         style={{
           display: "flex",
@@ -214,7 +184,7 @@ const Dashboard = ({ drawerWidth, appHeight }) => {
           optionSelected={opcionSeleccionada}
         />
       </div>
-      <div id="renderVista" className={styles.dashboardContent}>
+      <div id="renderVista" className={styles.dashboardContent} style={{ flex: 1, display: "flex", flexDirection: "column" }}>
         {renderizarVista()}
       </div>
     </div>
@@ -253,8 +223,7 @@ const colors = {
   },
 };
 
-
-const CustomDivider = styled(Divider)({
-  borderColor:`${colors.codGray[950]}`, 
-  border:"solid 1px"
+const CustomDivider = styled(Divider)( {
+  borderColor: `${colors.codGray[950]}`, 
+  border: "solid 1px"
 });

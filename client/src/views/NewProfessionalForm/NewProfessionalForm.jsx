@@ -81,7 +81,7 @@ const validate = (values) => {
   return errors;
 };
 
-const NewProfessionalForm = () => {
+const NewProfessionalForm = ({setNewProfessionalForm}) => {
   const newProfessional = useSelector(
     (state) => state.newProfessional.newProfessional
   );
@@ -202,6 +202,7 @@ console.log('fotodeper4fil',file);
   );
 
   resetForm();
+  setNewProfessionalForm(false);
 };
 
 

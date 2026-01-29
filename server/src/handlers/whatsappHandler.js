@@ -1,89 +1,52 @@
-const {
-    startController,
-    statusController,
-    getQRController,
-    sendMessageController,
-    logoutController
-} = require('../controllers/whatsappControllers')
-const startHandler = async (req, res) => {
+const { initSession, getQR, getStatus, sendMessage } = require("../services/whatsappservices");
+
+async function initWhatsappHandler(req, res) {
+  const { tenantId } = req.body;
+  if (!tenantId) return res.status(400).json({ error: "tenantId requerido" });
+
   try {
-    // Llamamos al controller que inicia la sesión
-    await startController();
+    const status = getStatus(tenantId);
 
-    // Esperamos hasta que se genere el QR
- 
-  
+    // ⛔ Bloquea sesiones duplicadas
+    if (status && (status.connection === "connecting" || status.connection === "open" || status.qr)) {
+      console.log(`⚠️ Sesión ya existente para tenant ${tenantId}, no se reinicia`);
+      return res.json({ ok: true, alreadyStarted: true });
+    }
 
-    const qr = await getQRController();
-    console.log('qr desde handler',qr);
-    
+    await initSession(tenantId);
+    res.json({ ok: true, started: true });
 
-    res.status(200).json(qr);
-  } catch (error) {
-    res.status(500).send({ error: error.message });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
   }
-};
+}
 
-const getQRHandler = async (req, res) => {
+function getQrHandler(req, res) {
+  const tenantId = req.params.tenantId;
+  const qr = getQR(tenantId);
+  res.json({ qr });
+}
+
+function getStatusHandler(req, res) {
+  const tenantId = req.params.tenantId;
+  const status = getStatus(tenantId);
+  res.json(status);
+}
+
+async function sendMessageHandler(req, res) {
+  const { tenantId, to, text } = req.body;
   try {
-    const qr = await getQRController();
-    const status = await statusController();
-
-    // ✅ DESACTIVAR CACHE COMPLETAMENTE
-    res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
-    res.setHeader("Pragma", "no-cache");
-    res.setHeader("Expires", "0");
-    res.setHeader("Surrogate-Control", "no-store");
-
-    if (!qr) {
-      return res.status(200).json({ status: "waiting", qr: null });
-    }
-
-    return res.status(200).json({
-         qr,
-         connected: status.connected,
-     });
-
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
+    await sendMessage(tenantId, to, text);
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
-};
-
-
-const statusHandler = async(req,res) => {
-    try {
-        const data = await statusController();
-        res.status(200).json(data);
-    } catch (error) {
-        res.status(500).send({ error: error.message });
-    }
-};
-
-const sendMessageHandler = async(req,res) => {
-    const { to, text } = req.body;
-    console.log('para',to);
-    
-
-    try {
-        const data = await sendMessageController(to, text);
-        res.status(200).json(data);
-    } catch (error) {
-        res.status(500).send({ error: error.message });
-    }
-};
-const logoutHandler = async(req,res) => {
-    try {
-        const data = await logoutController();
-        res.status(200).json(data);
-    } catch (error) {
-        res.status(500).send({ error: error.message });
-    }
-};
+}
 
 module.exports = {
-    startHandler,
-    statusHandler,
-    sendMessageHandler,
-    logoutHandler,
-    getQRHandler
+  initWhatsappHandler,
+  getQrHandler,
+  getStatusHandler,
+  sendMessageHandler,
 };
