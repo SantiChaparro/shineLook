@@ -1,2 +1,5 @@
-.vercel
 /node_modules
+/client/build
+/.vercel
+.env
+.env.local
