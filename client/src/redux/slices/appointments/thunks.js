@@ -210,7 +210,7 @@ export const postNewtenant = (dni,nombre,telefono,mail,rol,password) => {
 
     return async(dispatch) => {
 
-       const resp = axios.post(`http://localhost:3001/tenant/newtenant`,{dni,nombre,telefono,mail,rol,password});
+       const resp = await axios.post(`${urlApi}tenant/newtenant`,{dni,nombre,telefono,mail,rol,password});
        dispatch(createNewTenant({NewTenant: resp.data}));
     }
 
