@@ -5,22 +5,33 @@ const fs = require('fs');
 const path = require('path');
 const Tenant = require("./models/Tenant");
 const {
-  DB_USER, DB_PASSWORD, DB_HOST, DB_DEPLOY, DB_NAME
+  DB_USER, DB_PASSWORD, DB_HOST, DB_NAME
 } = process.env;
 
-console.log("DB_DEPLOY:", process.env.DB_DEPLOY,DB_USER);
+//console.log("DB_DEPLOY:", process.env.DB_DEPLOY,DB_USER);
 
-const sequelize = new Sequelize(process.env.DB_DEPLOY, {
-  logging: false,
-  native: false,
-  dialectOptions: { ssl: { require: true, rejectUnauthorized: false } },
-});
-// const sequelize = new Sequelize(DB_DEPLOY, {
-//   logging: false, 
-//   native: false, 
-//   dialectOptions:{ssl:{require:true,}}
-// });
+let sequelize;
 
+if (process.env.DB_DEPLOY) {
+  // 👉 Render / Producción
+  sequelize = new Sequelize(process.env.DB_DEPLOY, {
+    logging: false,
+    native: false,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
+  });
+} else {
+  // 👉 Local
+  sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
+    host: DB_HOST,
+    dialect: "postgres",
+    logging: false,
+  });
+}
 // --- BLOQUE TEMPORAL PARA PROBAR CONEXIÓN ---
 (async () => {
   try {
