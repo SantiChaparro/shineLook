@@ -8,6 +8,8 @@ const {
   DB_USER, DB_PASSWORD, DB_HOST, DB_DEPLOY, DB_NAME
 } = process.env;
 
+console.log("DB_DEPLOY:", process.env.DB_DEPLOY,DB_USER);
+
 const sequelize = new Sequelize(process.env.DB_DEPLOY, {
   logging: false,
   native: false,
@@ -18,6 +20,17 @@ const sequelize = new Sequelize(process.env.DB_DEPLOY, {
 //   native: false, 
 //   dialectOptions:{ssl:{require:true,}}
 // });
+
+// --- BLOQUE TEMPORAL PARA PROBAR CONEXIÓN ---
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("✅ Conexión a la base de datos exitosa!");
+  } catch (error) {
+    console.error("❌ Error de conexión:", error);
+  }
+})();
+// --- FIN BLOQUE TEMPORAL ---
 
 
 const basename = path.basename(__filename);
