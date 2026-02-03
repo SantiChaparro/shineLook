@@ -22,7 +22,9 @@ import ProfessionalRightPanel from '../../components/ProfessionalsRightPanel';
 import LeftPanelItemContent from "../../components/LeftPanelItemContent";
 import { urlApi } from "../../assets/urlApi";
 
-console.log(urlApi);
+const frontUrl = process.env.urlApi
+
+console.log(frontUrl);
 
 
 
@@ -131,9 +133,10 @@ const Professionals = () => {
   const dni = item.id;
   setSelectedId(dni);
 
+
   // 1️⃣ Traer rating
   const dbRating = await axios.get(
-    `${urlApi}/rating/dataBaseRating`,
+    `${frontUrl}/rating/dataBaseRating`,
     {
       params: {
         tenantId: tenantId,
