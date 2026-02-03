@@ -136,7 +136,7 @@ const Professionals = () => {
 
   // 1️⃣ Traer rating
   const dbRating = await axios.get(
-    `${frontUrl}/rating/dataBaseRating`,
+    `https://shinelook.onrender.com/rating/dataBaseRating`,
     {
       params: {
         tenantId: tenantId,
