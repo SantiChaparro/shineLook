@@ -22,6 +22,9 @@ import ProfessionalRightPanel from '../../components/ProfessionalsRightPanel';
 import LeftPanelItemContent from "../../components/LeftPanelItemContent";
 import { urlApi } from "../../assets/urlApi";
 
+console.log(urlApi);
+
+
 
 const Professionals = () => {
   const { professionals: professionalData } = useSelector(
@@ -55,6 +58,7 @@ const Professionals = () => {
    const [rating,setRating]= useState(null);
     const [professionalTotalAmount,setProfessionalTotalAmount]= useState(0);
   console.log(newProfessionalForm);
+  console.log(rating);
   
 
   useEffect(() => {
