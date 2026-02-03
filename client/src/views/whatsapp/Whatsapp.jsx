@@ -3,6 +3,7 @@ import { Box, Typography, CircularProgress } from "@mui/material";
 import QRCode from "react-qr-code";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import {urlApi} from "../../assets/urlApi";
 
 export default function Whatsapp() {
   const tenantId = useSelector((state) => state.tenant.tenantId);
@@ -18,7 +19,7 @@ export default function Whatsapp() {
   const start = async () => {
     setLoading(true);
     try {
-      await axios.post("http://localhost:3001/whatsapp/start-session", { tenantId });
+      await axios.post(`${urlApi}whatsapp/start-session`, { tenantId });
     } catch (err) {
       console.error(err);
     } finally {
@@ -29,7 +30,7 @@ export default function Whatsapp() {
   const poll = async () => {
     try {
       const status = await axios.get(
-        `http://localhost:3001/whatsapp/session-status/${tenantId}`,
+        `${urlApi}whatsapp/session-status/${tenantId}`,
         { headers: { "Cache-Control": "no-cache" } }
       );
 
@@ -40,7 +41,7 @@ export default function Whatsapp() {
       }
 
       const qrRes = await axios.get(
-        `http://localhost:3001/whatsapp/get-qr/${tenantId}`,
+        `${urlApi}whatsapp/get-qr/${tenantId}`,
         { headers: { "Cache-Control": "no-cache" } }
       );
 
