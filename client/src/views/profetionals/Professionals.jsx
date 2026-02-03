@@ -20,6 +20,7 @@ import NewProfessionalForm from "../NewProfessionalForm/NewProfessionalForm";
 import axios from "axios";
 import ProfessionalRightPanel from '../../components/ProfessionalsRightPanel';
 import LeftPanelItemContent from "../../components/LeftPanelItemContent";
+import { urlApi } from "../../assets/urlApi";
 
 
 const Professionals = () => {
@@ -128,7 +129,7 @@ const Professionals = () => {
 
   // 1️⃣ Traer rating
   const dbRating = await axios.get(
-    "http://localhost:3001/rating/dataBaseRating",
+    `${urlApi}/rating/dataBaseRating`,
     {
       params: {
         tenantId: tenantId,
