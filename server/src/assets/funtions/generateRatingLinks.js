@@ -6,7 +6,9 @@ const isLocal = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 
 // URL base para el backend que redirige al frontend
 const localBackendUrl = 'http://localhost:3001';  // tu backend local
-const prodBackendUrl = process.env.REACT_APP_API_URL ;
+//const prodBackendUrl = process.env.REACT_APP_API_URL ;
+
+const prodBackendUrl = "https://shinelook.onrender.com";
 
 const URL = isLocal ? localBackendUrl : prodBackendUrl;
 
