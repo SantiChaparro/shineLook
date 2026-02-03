@@ -22,7 +22,7 @@ import ProfessionalRightPanel from '../../components/ProfessionalsRightPanel';
 import LeftPanelItemContent from "../../components/LeftPanelItemContent";
 import { urlApi } from "../../assets/urlApi";
 
-const frontUrl = process.env.urlApi
+const frontUrl = urlApi
 
 console.log(frontUrl);
 
