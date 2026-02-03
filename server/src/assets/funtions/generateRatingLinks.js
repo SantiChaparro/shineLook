@@ -1,10 +1,17 @@
 require('dotenv').config();
 
-const ngrokjUrl = process.env.TUNNEL_URL || 'http://localhost:3001'
+
+// Detectamos automáticamente si estamos en local o en producción
+const isLocal = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
+
+// URL base para el backend que redirige al frontend
+const localBackendUrl = 'http://localhost:3001';  // tu backend local
+const prodBackendUrl = process.env.REACT_APP_API_URL ;
+
+const URL = isLocal ? localBackendUrl : prodBackendUrl;
 
 // Apuntamos al endpoint del servidor que redirige al frontend
-const BASE_URL = `${ngrokjUrl}/rating/confirm-rating`;
-
+const BASE_URL = `${URL}/rating/confirm-rating`;
 function generateRatingLinks(appointmentId, tenantId, professionalDni) {
     const links = [];
 
