@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
+import { urlApi } from "../assets/urlApi";
 
-const TUNNEL_URL = process.env.REACT_APP_FRONT_URL || 'http://localhost:3001';
+//const TUNNEL_URL = process.env.REACT_APP_FRONT_URL || 'http://localhost:3001';
 
 const ConfirmRating = () => {
   const [searchParams] = useSearchParams();
@@ -19,7 +20,7 @@ const ConfirmRating = () => {
 
     try {
       const response = await axios.post(
-        `${TUNNEL_URL}/rating/submitRating`,
+        `${urlApi}rating/submitRating`,
         {
           appointmentId,
           tenantId,
