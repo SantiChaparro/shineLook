@@ -9,7 +9,8 @@ ratingRouter.get('/urlRating',getUrlRating);
 ratingRouter.get('/confirm-rating', (req, res) => {
     const { appointmentId, tenantId, professionalDni, score } = req.query;
     const frontendUrl = process.env.FRONTEND_URL;
-    res.redirect(`${frontendUrl}/confirm-rating?appointmentId=${appointmentId}&tenantId=${tenantId}&professionalDni=${professionalDni}&score=${score}`);
+    //res.redirect(`${frontendUrl}/confirm-rating?appointmentId=${appointmentId}&tenantId=${tenantId}&professionalDni=${professionalDni}&score=${score}`);
+    res.redirect(`https://shine-look-p7n5.vercel.app/confirm-rating?appointmentId=${appointmentId}&tenantId=${tenantId}&professionalDni=${professionalDni}&score=${score}`);
 });
 ratingRouter.get("/submitRating", submitRatingHandler);
 ratingRouter.post("/submitRating", submitRatingHandler);
