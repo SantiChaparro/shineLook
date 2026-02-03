@@ -11,6 +11,7 @@ import { urlApi } from "../../../assets/urlApi";
 
 
 
+
 export const getAppointments = (tenantId) => {
 console.log('tenantId desde getAppointments',tenantId);
 
